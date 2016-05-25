@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.learn2crack.navigationdrawer.FooFragment;
+import com.learn2crack.navigationdrawer.TeamFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -55,7 +56,16 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Trash",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
+                    case R.id.team:
+                        // Begin the transaction
+                        Toast.makeText(getApplicationContext(),"Team",Toast.LENGTH_SHORT).show();
+                        FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
+                        tt.replace(R.id.content_main, new TeamFragment());
+                        tt.commit();
+                        drawerLayout.closeDrawers();
+                        break;
                     case R.id.logout:
+                        Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();
                         finish();
 
                 }
