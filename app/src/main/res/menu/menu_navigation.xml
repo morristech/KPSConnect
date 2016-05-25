@@ -7,15 +7,15 @@
             android:icon="@drawable/ic_home"/>
         <item
             android:id="@+id/settings"
-            android:title="Settings"
+            android:title="@string/settings"
             android:icon="@drawable/ic_setting"/>
         <item
             android:id="@+id/trash"
-            android:title="Trash"
+            android:title="@string/trash"
             android:icon="@drawable/ic_trash"/>
         <item
             android:id="@+id/logout"
-            android:title="Logout"
+            android:title="@string/exit"
             android:icon="@drawable/ic_exit"/>
     </group>
 </menu>
