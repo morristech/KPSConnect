@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.team:
                         // Begin the transaction
-                        Toast.makeText(getApplicationContext(),"Team",Toast.LENGTH_SHORT).show();
-                        FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
+                        Toast.makeText(getApplicationContext(),"This section isn't ready yet, wait for it!",Toast.LENGTH_LONG).show();
+                        /**FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
                         tt.replace(R.id.content_main, new TeamFragment());
-                        tt.commit();
+                        tt.commit();**/
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
@@ -91,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+    }
+    public void amitToast(){
+        Toast.makeText(getApplicationContext(),"Amit",Toast.LENGTH_SHORT).show();
     }
 
 }
