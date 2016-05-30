@@ -10,11 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.learn2crack.navigationdrawer.BlogFragment;
 import com.learn2crack.navigationdrawer.FooFragment;
 import com.learn2crack.navigationdrawer.TeamFragment;
+
+import me.msfjarvis.kpsconnect.R;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public void initNavigationDrawer() {
 
         NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -41,27 +47,22 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id){
                     case R.id.home:
-                        Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.settings:
-                        Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                    case R.id.blog:
                         // Begin the transaction
+                        Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.content_main, new FooFragment());
+                        ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
-                        drawerLayout.closeDrawers();
-                        break;
-                    case R.id.trash:
-                        Toast.makeText(getApplicationContext(),"Trash",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.team:
                         // Begin the transaction
-                        Toast.makeText(getApplicationContext(),"Team",Toast.LENGTH_SHORT).show();
-                        FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
+                        Toast.makeText(getApplicationContext(),"This section isn't ready yet, wait for it!",Toast.LENGTH_LONG).show();
+                        /**FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
                         tt.replace(R.id.content_main, new TeamFragment());
-                        tt.commit();
+                        tt.commit();**/
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
@@ -91,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+    }
+    public void amitToast(){
+        Toast.makeText(getApplicationContext(),"Amit",Toast.LENGTH_SHORT).show();
     }
 
 }
