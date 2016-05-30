@@ -10,11 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.learn2crack.navigationdrawer.BlogFragment;
 import com.learn2crack.navigationdrawer.FooFragment;
 import com.learn2crack.navigationdrawer.TeamFragment;
+
+import me.msfjarvis.kpsconnect.R;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -44,16 +49,12 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Home",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.settings:
-                        Toast.makeText(getApplicationContext(),"Settings",Toast.LENGTH_SHORT).show();
+                    case R.id.blog:
+                        Toast.makeText(getApplicationContext(),"KPS Blog",Toast.LENGTH_SHORT).show();
                         // Begin the transaction
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.content_main, new FooFragment());
+                        ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
-                        drawerLayout.closeDrawers();
-                        break;
-                    case R.id.trash:
-                        Toast.makeText(getApplicationContext(),"Trash",Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.team:
