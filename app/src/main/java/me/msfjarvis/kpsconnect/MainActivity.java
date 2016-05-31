@@ -18,6 +18,7 @@ import me.msfjarvis.kpsconnect.BlogFragment;
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    public NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +26,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
         initNavigationDrawer();
 
+    }
+    public void onHome(){
+        drawerLayout.closeDrawers();
     }
 
     public void initNavigationDrawer() {
 
-        NavigationView navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        navigationView = (NavigationView)findViewById(R.id.navigation_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -41,9 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id){
                     case R.id.home:
-                        Intent myIntent = new Intent(".AboutActivity");
-                        startActivity(myIntent);
-                        drawerLayout.closeDrawers();
+                        onHome();
                         break;
                     case R.id.blog:
                         // Begin the transaction
@@ -54,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
                         ft.commit();
                         break;
                     case R.id.about_kpsconnect:
-                        // Begin the transaction
-                        Toast.makeText(getApplicationContext(),"This section isn't ready yet, wait for it!",Toast.LENGTH_LONG).show();
-                        /**FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
-                        tt.replace(R.id.content_main, new TeamFragment());
-                        tt.commit();**/
+                        Intent myIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
+                        startActivity(myIntent);
+                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.settings:
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
@@ -88,9 +91,15 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-    }
-    public void amitToast(){
-        Toast.makeText(getApplicationContext(),"Amit",Toast.LENGTH_SHORT).show();
-    }
 
+
+    }
+    public void onResume(){
+        super.onResume();
+        navigationView.setCheckedItem(R.id.home);
+        onHome();
+
+    }
 }
+
+
