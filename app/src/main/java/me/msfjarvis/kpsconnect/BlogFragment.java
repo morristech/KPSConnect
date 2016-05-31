@@ -1,4 +1,4 @@
-package com.learn2crack.navigationdrawer;
+package me.msfjarvis.kpsconnect;
 
 import android.net.Uri;
 import android.os.Bundle;

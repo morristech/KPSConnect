@@ -11,4 +11,5 @@
     <string name="exit">Exit</string>
     <string name="amit">Amit Kumar</string>
     <string name="amit_hint">Web Interfaces Designer</string>
+    <string name="title_activity_about">AboutActivity</string>
 </resources>

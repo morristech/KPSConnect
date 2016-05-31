@@ -1,8 +1,8 @@
 package me.msfjarvis.kpsconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -10,16 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.MenuItem;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.learn2crack.navigationdrawer.BlogFragment;
-import com.learn2crack.navigationdrawer.FooFragment;
-import com.learn2crack.navigationdrawer.TeamFragment;
-
-import me.msfjarvis.kpsconnect.R;
+import me.msfjarvis.kpsconnect.BlogFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -47,17 +41,19 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (id){
                     case R.id.home:
+                        Intent myIntent = new Intent(".AboutActivity");
+                        startActivity(myIntent);
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.blog:
                         // Begin the transaction
+                        drawerLayout.closeDrawers();
                         Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
-                        drawerLayout.closeDrawers();
                         break;
-                    case R.id.team:
+                    case R.id.about_kpsconnect:
                         // Begin the transaction
                         Toast.makeText(getApplicationContext(),"This section isn't ready yet, wait for it!",Toast.LENGTH_LONG).show();
                         /**FragmentTransaction tt = getSupportFragmentManager().beginTransaction();
