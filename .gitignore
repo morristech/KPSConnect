@@ -32,4 +32,7 @@ proguard/
 captures/
 
 #idea files
-.idea/
+.idea/*
+
+#workspace files
+app/app.iml
