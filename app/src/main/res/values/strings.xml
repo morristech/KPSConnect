@@ -12,4 +12,8 @@
     <string name="amit">Amit Kumar</string>
     <string name="amit_hint">Web Interfaces Designer</string>
     <string name="title_activity_about">About KPS Connect</string>
+    <string name="connecting">Testing connection status....</string>
+    <string name="connection_is_a_go">Connection is a go! Welcome to KPS Connect!</string>
+    <string name="not_connected">No connection...</string>
+    <string name="is_first_run" translatable="false">is_first_run</string>
 </resources>
