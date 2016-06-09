@@ -15,7 +15,6 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         Toolbar toolbar_test = (Toolbar) findViewById(R.id.toolbar_test);
-        toolbar_test.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar_test.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

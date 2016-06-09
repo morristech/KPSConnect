@@ -21,12 +21,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
-import me.msfjarvis.kpsconnect.BlogFragment;
-
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -83,17 +77,20 @@ public class MainActivity extends AppCompatActivity {
                     .show();
             SharedPreferences.Editor edit = pref.edit();
             edit.putString("is_first_run", "no");
-            edit.commit();
+            edit.apply();
         }
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
         initNavigationDrawer();
+        onHome();
 
     }
     public void onHome(){
+        FragmentTransaction mainFragment = getSupportFragmentManager().beginTransaction();
+        mainFragment.replace(R.id.content_main, new MainFragment());
+        mainFragment.commit();
         drawerLayout.closeDrawers();
     }
 
@@ -112,16 +109,14 @@ public class MainActivity extends AppCompatActivity {
                         onHome();
                         break;
                     case R.id.blog:
-                        // Begin the transaction
                         drawerLayout.closeDrawers();
-                        Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
                         break;
                     case R.id.about_kpsconnect:
-                        Intent myIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
-                        startActivity(myIntent);
+                        Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
+                        startActivity(aboutIntent);
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.settings:
