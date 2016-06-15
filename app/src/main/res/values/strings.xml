@@ -11,13 +11,10 @@
     <string name="title_activity_settings">Settings</string>
     <string name="connecting">Testing connection status....</string>
     <string name="connection_is_a_go">Connection is a go! Welcome to KPS Connect!</string>
-    <string name="not_connected">No connection&#8230;</string>
+    <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
     <string name="is_first_run" translatable="false">is_first_run</string>
     <string name="intro">Insert awesome intro text here</string>
     <string name="progress_dialog">Loading…</string>
     <string name="please_wait">Please Wait…</string>
-    <string name="js_toggle_text">JavaScript in internal Browser</string>
-    <string name="js_warning_title">Warning!</string>
-    <string name="js_warning">Disabling JavaScript support</string>
 
 </resources>

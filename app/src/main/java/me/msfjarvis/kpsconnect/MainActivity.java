@@ -1,6 +1,7 @@
 package me.msfjarvis.kpsconnect;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Context context = getApplicationContext();
+        final Context context = this;
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -43,42 +44,39 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Log.i(TAG, "Connection is a go!");
                 Thread.sleep(1000);
+                Toast.makeText(MainActivity.this,R.string.connection_is_a_go, Toast.LENGTH_SHORT);
+                SharedPreferences pref =
+                        PreferenceManager.getDefaultSharedPreferences(this);
+                String is_first_run = pref.getString("is_first_run","n/a");
+                if (is_first_run.equals("n/a")) {
+                    new MaterialDialog.Builder(this)
+                            .title(R.string.app_name)
+                            .customView(R.layout.intro, false)
+                            .positiveText("OK")
+                            .show();
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("is_first_run", "no");
+                    edit.apply();
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 finish();
             }
         } else {
             Log.i(TAG, "No bloody connection");
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Log.i(TAG, "Setting error text");
-            Toast.makeText(context, "No connection. The app needs an active internet connection to function",Toast.LENGTH_LONG).show();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                Log.i(TAG, "Killing activity");
-                finish();
-
-            }
-        }
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        String is_first_run = pref.getString("is_first_run","n/a");
-        if (is_first_run.equals("n/a")) {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
-                    .customView(R.layout.intro, false)
+                    .content(R.string.not_connected)
                     .positiveText("OK")
+                    .dismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    })
                     .show();
-            SharedPreferences.Editor edit = pref.edit();
-            edit.putString("is_first_run", "no");
-            edit.apply();
         }
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -113,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
+                        new MaterialDialog.Builder(MainActivity.this)
+                                .title(R.string.progress_dialog)
+                                .content(R.string.please_wait)
+                                .progress(true, 0)
+                                .show();
+                        try{
+                            Thread.sleep(2000);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         break;
                     case R.id.about_kpsconnect:
                         Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
