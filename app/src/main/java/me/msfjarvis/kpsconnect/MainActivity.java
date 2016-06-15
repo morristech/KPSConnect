@@ -127,9 +127,6 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(aboutIntent);
                         drawerLayout.closeDrawers();
                         break;
-                    case R.id.settings:
-                        drawerLayout.closeDrawers();
-                        break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();
                         finish();
