@@ -35,22 +35,11 @@ public class BlogFragment extends Fragment {
                 .progress(true, 0)
                 .show();
         WebSettings webSettings = blogWebView.getSettings();
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(getContext());
-        String is_js_enabled = pref.getString("is_js_enabled","n/a");
-        if (is_js_enabled.equals("yes")){
-            webSettings.setJavaScriptEnabled(true);
-        }
-        if (is_js_enabled.equals("no")){
-            webSettings.setJavaScriptEnabled(false);
-        }else{
-            webSettings.setJavaScriptEnabled(true);
-        }
+        webSettings.setJavaScriptEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
+        webSettings.setGeolocationEnabled(false);
 
-
-        // Setup any handles to view objects here
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
     }
 
 }

@@ -39,12 +39,9 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-        Log.i(TAG, "Connection status received");
         if (isConnected) {
             try {
-                Log.i(TAG, "Connection is a go!");
                 Thread.sleep(1000);
-                Toast.makeText(MainActivity.this,R.string.connection_is_a_go, Toast.LENGTH_SHORT);
                 SharedPreferences pref =
                         PreferenceManager.getDefaultSharedPreferences(this);
                 String is_first_run = pref.getString("is_first_run","n/a");
@@ -63,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         } else {
-            Log.i(TAG, "No bloody connection");
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
                     .content(R.string.not_connected)
@@ -107,17 +103,20 @@ public class MainActivity extends AppCompatActivity {
                         onHome();
                         break;
                     case R.id.blog:
+                        //Log.i(); only used for debugging lags, has no real use for now
                         drawerLayout.closeDrawers();
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.content_main, new BlogFragment());
                         ft.commit();
-                        new MaterialDialog.Builder(MainActivity.this)
+                        MaterialDialog.Builder builder = new MaterialDialog.Builder(MainActivity.this)
                                 .title(R.string.progress_dialog)
                                 .content(R.string.please_wait)
-                                .progress(true, 0)
-                                .show();
-                        try{
-                            Thread.sleep(2000);
+                                .progress(true, 0);
+                        MaterialDialog dialog = builder.build();
+                        dialog.show();
+                        try {
+                            Thread.sleep(2500);
+                            dialog.dismiss();
                         }catch (Exception e){
                             e.printStackTrace();
                         }
