@@ -16,6 +16,8 @@
     <string name="progress_dialog">Loading…</string>
     <string name="please_wait">Please Wait…</string>
     <string name="wip">This section is still WIP, check back later!</string>
-    <string name="app_about_intro">KPS Connect is the dream child of Manika Pal, put into a concrete form by hobbyist programmer Harsh Shandilya better know to the internet as MSF Jarvis. It is a means to connect to the school, an easily accessible one, giving you one click access to the school blog, website, and handy forms to provide feedback for the app, and the school itself.</string>
-
+    <string name="app_about_intro">KPS Connect is the dream child of Manika Pal, coded by hobbyist programmer Harsh Shandilya, better known as MSF Jarvis. It is a means to connect to the school, an easily accessible one, giving you one click access to the school blog, website, and handy forms to provide feedback for the app, and the school itself.</string>
+    <string name="contributors_jeff"><b>Jeff Corcoran</b> : XDA Labs dev and awesome friend</string>
+    <string name="contributors_danijel"><b>Danijel Markov</b> : Creator of L Speed Mod</string>
+    <string name="libraries_used_title">Libraries used</string>
 </resources>
