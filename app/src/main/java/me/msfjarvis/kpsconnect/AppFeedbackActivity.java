@@ -4,16 +4,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import java.lang.reflect.Array;
 
 public class AppFeedbackActivity extends AppCompatActivity {
     @Override
@@ -48,6 +44,7 @@ public class AppFeedbackActivity extends AppCompatActivity {
             sendIntent.putExtra(Intent.EXTRA_TEXT, messageText);
             try {
                 startActivity(sendIntent);
+                finish();
             }catch (ActivityNotFoundException e){
                 Intent sendMessageIntent = new Intent(Intent.ACTION_SEND);
                 sendMessageIntent.setType("text/plain");
