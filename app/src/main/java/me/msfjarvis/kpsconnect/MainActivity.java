@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.tjeannin.apprate.AppRate;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -34,14 +35,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Context context = this;
+        new AppRate(this)
+                .setMinDaysUntilPrompt(3)
+                .setMinLaunchesUntilPrompt(5)
+                .setShowIfAppHasCrashed(false)
+                .init();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            try {
-                Thread.sleep(1000);
                 SharedPreferences pref =
                         PreferenceManager.getDefaultSharedPreferences(this);
                 String is_first_run = pref.getString("is_first_run","n/a");
@@ -55,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
                     edit.putString("is_first_run", "no");
                     edit.apply();
                 }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                finish();
-            }
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
@@ -87,9 +87,46 @@ public class MainActivity extends AppCompatActivity {
         mainFragment.commit();
         drawerLayout.closeDrawers();
     }
-
+    public void onBlog(){
+        drawerLayout.closeDrawers();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, new BlogFragment());
+        ft.commit();
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(MainActivity.this)
+                .title(R.string.progress_dialog)
+                .content(R.string.please_wait)
+                .progress(true, 0);
+        MaterialDialog dialog = builder.build();
+        dialog.show();
+        try {
+            Thread.sleep(2500);
+            dialog.dismiss();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void onAbout(){
+        Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
+        try {
+            startActivity(aboutIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
+        }
+        drawerLayout.closeDrawers();
+    }
+    public void onFeedback(){
+        Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
+        try {
+            startActivity(feedbackIntent);
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
+        }
+        drawerLayout.closeDrawers();
+    }
+    String selected = "";
     public void initNavigationDrawer() {
-
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -101,45 +138,17 @@ public class MainActivity extends AppCompatActivity {
                 switch (id){
                     case R.id.home:
                         onHome();
+                        selected = "home";
                         break;
                     case R.id.blog:
-                        //Log.i(); only used for debugging lags, has no real use for now
-                        drawerLayout.closeDrawers();
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.content_main, new BlogFragment());
-                        ft.commit();
-                        MaterialDialog.Builder builder = new MaterialDialog.Builder(MainActivity.this)
-                                .title(R.string.progress_dialog)
-                                .content(R.string.please_wait)
-                                .progress(true, 0);
-                        MaterialDialog dialog = builder.build();
-                        dialog.show();
-                        try {
-                            Thread.sleep(2500);
-                            dialog.dismiss();
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
+                        onBlog();
+                        selected = "blog";
                         break;
                     case R.id.app_feedback:
-                        Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
-                        try {
-                            startActivity(feedbackIntent);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
-                        }
-                        drawerLayout.closeDrawers();
+                        onFeedback();
                         break;
                     case R.id.about_kpsconnect:
-                        Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
-                        try {
-                            startActivity(aboutIntent);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
-                        }
-                        drawerLayout.closeDrawers();
+                        onAbout();
                         break;
                     case R.id.logout:
                         finish();
@@ -167,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
 
+    }
+    public void onResume(){
+        super.onResume();
+        if (selected.equals("home")){
+            navigationView.setCheckedItem(R.id.home);
+            onHome();
+        }else if (selected.equals("blog")){
+            navigationView.setCheckedItem(R.id.blog);
+            onBlog();
+        }
     }
 
 }
