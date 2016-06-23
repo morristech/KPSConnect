@@ -121,13 +121,27 @@ public class MainActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         break;
+                    case R.id.app_feedback:
+                        Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
+                        try {
+                            startActivity(feedbackIntent);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
+                        }
+                        drawerLayout.closeDrawers();
+                        break;
                     case R.id.about_kpsconnect:
                         Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
-                        startActivity(aboutIntent);
+                        try {
+                            startActivity(aboutIntent);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
+                        }
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
-                        Toast.makeText(getApplicationContext(),"Exiting...",Toast.LENGTH_SHORT).show();
                         finish();
 
                 }
@@ -135,8 +149,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         View header = navigationView.getHeaderView(0);
-        TextView tv_email = (TextView)header.findViewById(R.id.tv_email);
-        tv_email.setText(R.string.email);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
@@ -154,12 +166,6 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
 
-
-    }
-    public void onResume(){
-        super.onResume();
-        navigationView.setCheckedItem(R.id.home);
-        onHome();
 
     }
 

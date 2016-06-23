@@ -7,7 +7,6 @@
     <string name="blog">Blog</string>
     <string name="exit">Exit</string>
     <string name="title_activity_about">About KPS Connect</string>
-    <string name="title_activity_settings">Settings</string>
     <string name="connecting">Testing connection status....</string>
     <string name="connection_is_a_go">Connection is a go! Welcome to KPS Connect!</string>
     <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
@@ -20,4 +19,18 @@
     <string name="contributors_jeff"><b>Jeff Corcoran</b> : XDA Labs dev and awesome friend</string>
     <string name="contributors_danijel"><b>Danijel Markov</b> : Creator of L Speed Mod</string>
     <string name="libraries_used_title">Libraries used</string>
+    <string name="subject">Subject</string>
+    <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
+    <string name="title_activity_feedback">Feedback</string>
+    <string name="message">Your message to us goes here</string>
+    <string name="send">SEND</string>
+    <string name="chooser_title">Choose an email client</string>
+    <string-array name="email">
+        <item>
+            "app@khaitanpublicschool.com"
+        </item>
+        <item>
+            "msfjarvis@gmail.com"
+        </item>
+    </string-array>
 </resources>
