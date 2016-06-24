@@ -157,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        View header = navigationView.getHeaderView(0);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
@@ -181,10 +180,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (selected.equals("home")){
             navigationView.setCheckedItem(R.id.home);
-            onHome();
         }else if (selected.equals("blog")){
             navigationView.setCheckedItem(R.id.blog);
-            onBlog();
         }
     }
 
