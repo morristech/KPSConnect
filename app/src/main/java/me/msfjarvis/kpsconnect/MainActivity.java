@@ -92,18 +92,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, new BlogFragment());
         ft.commit();
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(MainActivity.this)
-                .title(R.string.progress_dialog)
-                .content(R.string.please_wait)
-                .progress(true, 0);
-        MaterialDialog dialog = builder.build();
-        dialog.show();
-        try {
-            Thread.sleep(2500);
-            dialog.dismiss();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
     public void onAbout(){
         Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
