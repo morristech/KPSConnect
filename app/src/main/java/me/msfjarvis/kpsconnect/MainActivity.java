@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         assert navigationView != null;
+        selected = "home";
+        navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
