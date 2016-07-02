@@ -93,16 +93,7 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.content_main, new BlogFragment());
         ft.commit();
     }
-    public void onAbout(){
-        Intent aboutIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
-        try {
-            startActivity(aboutIntent);
-        }catch (Exception e){
-            e.printStackTrace();
-            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
-        }
-        drawerLayout.closeDrawers();
-    }
+
     public void onFeedback(){
         Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
         try {
@@ -136,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         onFeedback();
                         break;
                     case R.id.about_kpsconnect:
-                        onAbout();
+                        drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
                         finish();
