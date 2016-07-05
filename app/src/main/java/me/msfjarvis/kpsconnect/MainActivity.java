@@ -14,20 +14,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import com.mikepenz.aboutlibraries.*;
 import android.view.View;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.tjeannin.apprate.AppRate;
+import me.msfjarvis.apprate.*;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     public NavigationView navigationView;
-    private static final String TAG = "KPS Connect";
 
 
     @Override
@@ -109,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         assert navigationView != null;
         selected = "home";
+        onHome();
         navigationView.setCheckedItem(R.id.home);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -129,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                         onFeedback();
                         break;
                     case R.id.about_kpsconnect:
+                        new LibsBuilder()
+                                .start(MainActivity.this);
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:
