@@ -23,16 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
-            android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="me.msfjarvis.kpsconnect.ABOUTACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".AppFeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:theme="@style/AppTheme.NoActionBar">
