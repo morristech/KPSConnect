@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class MainFragment extends Fragment {
     @Override
@@ -17,7 +21,12 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-
-
+        ImageView homeImage = (ImageView) view.findViewById(R.id.homeImageView);
+        TextView homeText = (TextView) view.findViewById(R.id.homeTextView);
+        String imageUri = "https://github.com/MSF-Jarvis.png";
+        Picasso
+                .with(getContext())
+                .load(imageUri)
+                .into(homeImage);
     }
 }
