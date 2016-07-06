@@ -34,4 +34,10 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.7.0@aar') {
         transitive = true
     }
+/*    compile ('com.squareup.picasso:picasso:2.5.2') {
+        transitive = true
+    }*/
+    compile ('com.squareup.okhttp3:okhttp:3.4.0-RC1') {
+        transitive = true
+    }
 }
