@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
     String selected = "";
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
         assert navigationView != null;
         selected = "home";
         onHome();
@@ -138,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
 
