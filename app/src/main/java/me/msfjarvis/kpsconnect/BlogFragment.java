@@ -1,5 +1,6 @@
 package me.msfjarvis.kpsconnect;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,13 +10,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import me.msfjarvis.kpsconnect.R;
 public class BlogFragment extends Fragment {
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_blog, parent, false);
     }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final WebView blogWebView = (WebView) view.findViewById(R.id.blogwebview);
