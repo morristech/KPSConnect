@@ -21,12 +21,6 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import me.msfjarvis.apprate.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-
-import me.msfjarvis.kpsconnect.BlogFragment;
-
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
@@ -87,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
     }
     public void onBlog(){
-        drawerLayout.closeDrawers();
+        Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, new BlogFragment());
         ft.commit();
@@ -123,25 +117,12 @@ public class MainActivity extends AppCompatActivity {
                         selected = "home";
                         break;
                     case R.id.blog:
-<<<<<<< HEAD
                         onBlog();
                         selected = "blog";
                         break;
                     case R.id.app_feedback:
                         onFeedback();
-=======
-                        // Begin the transaction
                         drawerLayout.closeDrawers();
-                        Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
-                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.content_main, new BlogFragment());
-                        ft.commit();
-                        break;
-                    case R.id.about_kpsconnect:
-                        Intent myIntent = new Intent("me.msfjarvis.kpsconnect.ABOUTACTIVITY");
-                        startActivity(myIntent);
-                        drawerLayout.closeDrawers();
->>>>>>> parent of c6c67ce... Honestly, I don't even know what all changed in all these days.
                         break;
                     case R.id.about_kpsconnect:
                         new LibsBuilder()

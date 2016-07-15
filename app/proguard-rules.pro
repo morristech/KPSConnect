@@ -21,4 +21,16 @@
 -dontskipnonpubliclibraryclasses
 -dontpreverify
 -verbose
-
+-dontobfuscate
+-dontwarn
+-dontskipnonpubliclibraryclassmembers
+-keepclasseswithmembernames
+-keepclassmembers class me.msfjarvis.kpsconnect.MainActivity{
+    public *;
+    private *;
+}
+-keep public class MainActivity
+-keep public class MainFragment
+-keep public class BlogFragment
+-keep public class AppFeedbackActivity
+-keep public class AboutActivity
