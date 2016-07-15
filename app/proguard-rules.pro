@@ -23,5 +23,3 @@
 -verbose
 -dontobfuscate
 -dontwarn
--dontskipnonpubliclibraryclassmembers
--keepclasseswithmembernames
