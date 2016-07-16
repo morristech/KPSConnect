@@ -35,4 +35,6 @@
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
     <string name="aboutLibraries_description_text">KPS Connect is the dream child of Manika Pal, coded by hobbyist programmer Harsh Shandilya, better known as MSF Jarvis. It is a means to connect to the school, an easily accessible one, giving you one click access to the school blog, website, and handy forms to provide feedback for the app, and the school itself.</string>
+    <string name="slide_1_title">Welcome</string>
+    <string name="slide_1_description">This setup wizard will walk you through the initial setup of KPS Connect</string>
 </resources>
