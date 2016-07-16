@@ -2,7 +2,6 @@ package com.heinrichreimersoftware.materialintro.slide;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
@@ -196,13 +195,7 @@ public class SimpleSlide implements Slide, RestorableSlide, ButtonCtaSlide {
         }
 
         public Builder titleHtml(String titleHtml) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                this.title = Html.fromHtml(titleHtml, Html.FROM_HTML_MODE_LEGACY);
-            }
-            else {
-                //noinspection deprecation
-                this.title = Html.fromHtml(titleHtml);
-            }
+            this.title = Html.fromHtml(titleHtml);
             this.titleRes = 0;
             return this;
         }
@@ -220,13 +213,7 @@ public class SimpleSlide implements Slide, RestorableSlide, ButtonCtaSlide {
         }
 
         public Builder descriptionHtml(String descriptionHtml) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                this.description = Html.fromHtml(descriptionHtml, Html.FROM_HTML_MODE_LEGACY);
-            }
-            else {
-                //noinspection deprecation
-                this.description = Html.fromHtml(descriptionHtml);
-            }
+            this.description = Html.fromHtml(descriptionHtml);
             this.descriptionRes = 0;
             return this;
         }
@@ -285,13 +272,7 @@ public class SimpleSlide implements Slide, RestorableSlide, ButtonCtaSlide {
         }
 
         public Builder buttonCtaLabelHtml(String buttonCtaLabelHtml) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml, Html.FROM_HTML_MODE_LEGACY);
-            }
-            else {
-                //noinspection deprecation
-                this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml);
-            }
+            this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml);
             this.buttonCtaLabelRes = 0;
             return this;
         }

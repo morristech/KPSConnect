@@ -158,15 +158,9 @@ public class FragmentSlide implements Slide, RestorableSlide, ButtonCtaSlide {
         }
 
         public Builder buttonCtaLabelHtml(String buttonCtaLabelHtml) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml, Html.FROM_HTML_MODE_LEGACY);
-            }
-            else {
-                //noinspection deprecation
-                this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml);
-            }
-            this.buttonCtaLabelRes = 0;
-            return this;
+           this.buttonCtaLabel = Html.fromHtml(buttonCtaLabelHtml);
+           this.buttonCtaLabelRes = 0;
+           return this;
         }
 
         public Builder buttonCtaLabel(@StringRes int buttonCtaLabelRes) {
