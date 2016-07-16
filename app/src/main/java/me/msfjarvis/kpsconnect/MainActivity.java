@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -15,11 +16,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import com.mikepenz.aboutlibraries.*;
+import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
-import me.msfjarvis.apprate.*;
+import me.msfjarvis.apprate.AppRate;
+import me.pushy.sdk.Pushy;
+import me.pushy.sdk.exceptions.PushyException;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -30,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Pushy.listen(this);
         setContentView(R.layout.activity_main);
         final Context context = this;
         new AppRate(this)
@@ -50,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
                     Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
                     startActivity(introIntent);
                     SharedPreferences.Editor edit = pref.edit();
-                    edit.putString("is_first_run", "no");
+                    edit.putString("is_first_run", "one");
                     edit.apply();
+                } else if(is_first_run.equals("one")) {
+                    new RegisterForPushNotificationsAsync().execute();
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("is_first_run","two");
                 }
         } else {
             new MaterialDialog.Builder(this)
@@ -124,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.about_kpsconnect:
                         new LibsBuilder()
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT)
                                 .start(MainActivity.this);
                         drawerLayout.closeDrawers();
                         break;
@@ -151,6 +161,38 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
 
+    }
+    private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
+    {
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+            String result;
+           try
+            {
+                result = Pushy.register(MainActivity.this);
+            }
+            catch (PushyException exc)
+            {
+                result = exc.getMessage();
+            }
+            Log.d("Pushy", "Registration result: " + result);
+
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result)
+        {
+            Toast.makeText(MainActivity.this,"Registration result: " + result,Toast.LENGTH_LONG).show();
+            // Activity died?
+            if ( isFinishing() )
+            {
+                return;
+            }
+        }
     }
     public void onResume(){
         super.onResume();

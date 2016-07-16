@@ -11,28 +11,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class BlogFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_blog, parent, false);
     }
-    @SuppressLint("SetJavaScriptEnabled")
+    private WebView myWebView;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        final WebView blogWebView = (WebView) view.findViewById(R.id.blogwebview);
-        blogWebView.loadUrl("http://www.khaitanpublicschool.com/blog");
-        WebSettings webSettings = blogWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(false);
-        webSettings.setGeolocationEnabled(false);
+        myWebView = (WebView) view.findViewById(R.id.blogwebview);
+        myWebView.getSettings().setLoadsImagesAutomatically(true);
+        myWebView.getSettings().setJavaScriptEnabled(true);
+        myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        myWebView.setWebViewClient(new MyBrowser());
+        myWebView.loadUrl("http://www.khaitanpublicschool.com/blog");
+        myWebView.getSettings().setUseWideViewPort(true);
+        myWebView.getSettings().setLoadWithOverviewMode(true);
+        myWebView.getSettings().setSupportZoom(true);
+        myWebView.getSettings().setBuiltInZoomControls(true); // allow pinch to zooom
+        myWebView.getSettings().setDisplayZoomControls(false); // disable the default zoom controls on the page
         final FloatingActionButton shareFab = (FloatingActionButton) view.findViewById(R.id.shareFab);
         shareFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String shareUrl = blogWebView.getUrl();
-                String shareTitle = blogWebView.getTitle();
+                String shareUrl = myWebView.getUrl();
+                String shareTitle = myWebView.getTitle();
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 String finalShareString = shareTitle + " - " + shareUrl;
@@ -45,4 +50,13 @@ public class BlogFragment extends Fragment {
             }
         });
     }
+    private class MyBrowser extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 }
+
+

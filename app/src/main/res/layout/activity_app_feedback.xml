@@ -36,10 +36,15 @@
                 android:hint="@string/subject"
                 android:textColorHint="@color/Black" />
     </com.github.florent37.materialtextfield.MaterialTextField>
-    <android.support.v7.widget.CardView
+
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_margin="@dimen/activity_horizontal_margin">
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_gravity="center_horizontal"
+        app:mtf_image="@drawable/ic_email_black_24dp"
+        app:mtf_labelColor="@color/colorPrimaryDark"
+        app:mtf_openKeyboardOnFocus="true">
         <EditText
             android:id="@+id/message"
             android:layout_width="match_parent"
@@ -48,7 +53,7 @@
             android:hint="@string/message"
             android:textColorHint="@color/Black" />
 
-    </android.support.v7.widget.CardView>
+    </com.github.florent37.materialtextfield.MaterialTextField>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/feedbackFAB"
         android:layout_width="wrap_content"
