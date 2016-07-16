@@ -23,6 +23,7 @@
     <string name="title_activity_feedback">Feedback</string>
     <string name="message">Your message to us goes here</string>
     <string name="send">SEND</string>
+    <string name="emailid">Your email here</string>
     <string name="chooser_title">Choose an email client</string>
     <string-array name="email">
         <item>
