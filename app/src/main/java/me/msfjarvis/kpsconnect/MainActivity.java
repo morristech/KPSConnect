@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.about_kpsconnect:
                         new LibsBuilder()
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT)
                                 .start(MainActivity.this);
                         drawerLayout.closeDrawers();
                         break;
