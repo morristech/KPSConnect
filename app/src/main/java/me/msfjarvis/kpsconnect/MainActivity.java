@@ -47,11 +47,8 @@ public class MainActivity extends AppCompatActivity {
                         PreferenceManager.getDefaultSharedPreferences(this);
                 String is_first_run = pref.getString("is_first_run","n/a");
                 if (is_first_run.equals("n/a")) {
-                    new MaterialDialog.Builder(this)
-                            .title(R.string.app_name)
-                            .customView(R.layout.intro, false)
-                            .positiveText("OK")
-                            .show();
+                    Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
+                    startActivity(introIntent);
                     SharedPreferences.Editor edit = pref.edit();
                     edit.putString("is_first_run", "no");
                     edit.apply();
@@ -81,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
     }
     public void onBlog(){
+        drawerLayout.closeDrawers();
         Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, new BlogFragment());
