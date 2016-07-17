@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "175250694181",
+    "firebase_url": "https://kps-connect.firebaseio.com",
+    "project_id": "kps-connect",
+    "storage_bucket": "kps-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175250694181:android:e61a29fd12048f0f",
+        "android_client_info": {
+          "package_name": "me.msfjarvis.kpsconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175250694181-f9t1dhf61hir107l4i50crmng8d2frrc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.msfjarvis.kpsconnect",
+            "certificate_hash": "F3A73B27B3CE9734E93E46B664A31813AC45755B"
+          }
+        },
+        {
+          "client_id": "175250694181-0v393em72s1lb6rquu52qspjnq6ij7tv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCgOnsF0Rtwz2UjCvohmn7Sdf5EpWeTAU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175250694181-0v393em72s1lb6rquu52qspjnq6ij7tv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
