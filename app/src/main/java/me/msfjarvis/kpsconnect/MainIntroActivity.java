@@ -14,12 +14,12 @@ public class MainIntroActivity extends IntroActivity {
                 .title(R.string.slide_1_title)
                 .description(R.string.slide_1_description)
                 .image(R.mipmap.ic_launcher)
-                .background(R.color.colorPrimaryDark)
+                .background(R.color.colorPrimary)
                 .build());
 
         addSlide(new FragmentSlide.Builder()
                 .fragment(new IntroSubscriptionSlideFragment())
-                .background(R.color.colorPrimaryDark)
+                .background(R.color.colorPrimary)
                 .build());
     }
 }
