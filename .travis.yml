@@ -24,6 +24,8 @@ android:
 
 script:
     - ./gradlew clean assemble --stacktrace --info
+    - version=grep app/build.gradle | dd bs=1 skip=21 count=10
+    - curl --upload-file app/app-debug.apk https://transfer.sh/kpsconnect-$version.apk
 
 notifications:
   email: true
