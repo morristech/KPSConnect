@@ -1,15 +1,16 @@
 package me.msfjarvis.kpsconnect;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -19,9 +20,11 @@ public class BlogFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_blog, parent, false);
     }
     private WebView myWebView;
+    private DrawerLayout drawerLayout;
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         myWebView = (WebView) view.findViewById(R.id.blogwebview);
+        drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer);
         myWebView.getSettings().setLoadsImagesAutomatically(true);
         myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
@@ -56,6 +59,21 @@ public class BlogFragment extends Fragment {
             view.loadUrl(url);
             return true;
         }
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    if (myWebView.canGoBack()) {
+                        myWebView.goBack();
+                    } else {
+                        drawerLayout.openDrawer(Gravity.RIGHT,true);
+                    }
+                    return true;
+            }
+
+        }
+        return onKeyDown(keyCode, event);
     }
 }
 

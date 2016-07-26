@@ -4,11 +4,6 @@
     tools:context="me.msfjarvis.kpsconnect.MainActivity">
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
         android:title="@string/app_name"
         app:showAsAction="always" />
-    <item
-        android:enabled="true"
-        android:title="@string/title_activity_about"
-        app:showAsAction="collapseActionView"/>
 </menu>

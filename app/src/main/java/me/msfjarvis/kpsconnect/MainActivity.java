@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void onHome(){
         drawerLayout.closeDrawers();
+        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
+        ht.replace(R.id.content_main, new MainFragment());
+        ht.commit();
     }
     public void onBlog(){
         drawerLayout.closeDrawers();

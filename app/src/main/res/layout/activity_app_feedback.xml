@@ -37,23 +37,15 @@
                 android:textColorHint="@color/Black" />
     </com.github.florent37.materialtextfield.MaterialTextField>
 
-    <com.github.florent37.materialtextfield.MaterialTextField
-        android:layout_width="300dp"
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/message"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_gravity="center_horizontal"
-        app:mtf_image="@drawable/ic_email_black_24dp"
-        app:mtf_labelColor="@color/colorPrimaryDark"
-        app:mtf_openKeyboardOnFocus="true">
-        <EditText
-            android:id="@+id/message"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:hint="@string/message"
-            android:textColorHint="@color/Black" />
-
-    </com.github.florent37.materialtextfield.MaterialTextField>
+        android:hint="@string/message"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        app:met_floatingLabel="normal" />
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/feedbackFAB"
         android:layout_width="wrap_content"
