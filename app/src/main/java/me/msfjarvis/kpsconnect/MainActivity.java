@@ -24,6 +24,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import me.msfjarvis.apprate.AppRate;
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
+import com.mikepenz.aboutlibraries.ui.LibsFragment;
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -107,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
         }
         drawerLayout.closeDrawers();
     }
+    public void onAbout(){
+        LibsSupportFragment fragment = new LibsBuilder()
+                .supportFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, fragment);
+        ft.commit();
+    }
+
     String selected = "";
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
@@ -135,9 +145,7 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
-                        new LibsBuilder()
-                                .withActivityStyle(Libs.ActivityStyle.LIGHT)
-                                .start(MainActivity.this);
+                        onAbout();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.logout:

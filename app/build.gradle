@@ -9,8 +9,8 @@ android {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 114
-        versionName "1.1.4-beta"
+        versionCode 120
+        versionName "1.2.0-beta"
     }
     buildTypes {
          release {
@@ -40,6 +40,7 @@ dependencies {
         transitive = true
     }
     compile 'me.pushy:sdk:1.0.10'
+    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile (
         [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
         [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
