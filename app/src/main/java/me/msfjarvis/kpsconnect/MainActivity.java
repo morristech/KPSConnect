@@ -189,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result)
         {
-            Toast.makeText(MainActivity.this,"Registration result: " + result,Toast.LENGTH_LONG).show();
             // Activity died?
             if ( isFinishing() )
             {
