@@ -18,7 +18,7 @@ public class MainIntroActivity extends IntroActivity {
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.slide_1_title)
                 .description(R.string.slide_1_description)
-                .image(R.mipmap.ic_launcher)
+                .image(R.drawable.ic_launcher)
                 .background(R.color.colorPrimary)
                 .build());
         final SimpleSlide permissionsSlide = new SimpleSlide.Builder()
