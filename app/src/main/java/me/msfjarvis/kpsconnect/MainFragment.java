@@ -1,17 +1,12 @@
 package me.msfjarvis.kpsconnect;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-
-import com.baoyz.widget.PullRefreshLayout;
-import com.squareup.picasso.Picasso;
 
 public class MainFragment extends Fragment {
 
@@ -29,19 +24,6 @@ public class MainFragment extends Fragment {
                 startActivity(introIntent);
             }
         });
-        ImageView imageView = (ImageView) view.findViewById(R.id.homeImageView);
-        Picasso.with(getContext())
-                .load("http://khaitanpublicschool.com/blog/wp-content/themes/khaitan/images/logo-blog.png")
-                .into(imageView);
-        final PullRefreshLayout layout = (PullRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Snackbar.make(view,"Refreshed successfully",Snackbar.LENGTH_SHORT).show();
-                layout.setRefreshing(false);
-            }
-        });
-
 
     }
 }

@@ -29,7 +29,12 @@ public class BlogFragment extends Fragment {
         myWebView.getSettings().setJavaScriptEnabled(true);
         myWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         myWebView.setWebViewClient(new MyBrowser());
-        myWebView.loadUrl("http://www.khaitanpublicschool.com/blog");
+        Bundle bundle = this.getArguments();
+        String url = "";
+        if (bundle != null) {
+            url = bundle.getString("url","http://www.khaitanpublicschool.com/blog");
+        }
+        myWebView.loadUrl(url);
         myWebView.getSettings().setUseWideViewPort(true);
         myWebView.getSettings().setLoadWithOverviewMode(true);
         myWebView.getSettings().setSupportZoom(true);

@@ -10,13 +10,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import com.mikepenz.aboutlibraries.*;
-import android.util.Log;
 import android.view.View;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,7 +24,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import me.msfjarvis.apprate.AppRate;
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
-import com.mikepenz.aboutlibraries.ui.LibsFragment;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,13 +31,17 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     public NavigationView navigationView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
         final Context context = this;
+        if ( getIntent() != null && getIntent().getStringExtra("url") != null){
+
+            onBlog(getIntent().getStringExtra("url"));
+        }
+        new RegisterForPushNotificationsAsync().execute();
         new AppRate(this)
                 .setMinDaysUntilPrompt(3)
                 .setMinLaunchesUntilPrompt(5)
@@ -59,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor edit = pref.edit();
                     edit.putString("is_first_run", "one");
                     edit.apply();
-                } else if(is_first_run.equals("one")) {
-                    new RegisterForPushNotificationsAsync().execute();
-                    SharedPreferences.Editor edit = pref.edit();
-                    edit.putString("is_first_run","two");
                 }
         } else {
             new MaterialDialog.Builder(this)
@@ -91,11 +90,17 @@ public class MainActivity extends AppCompatActivity {
         ht.replace(R.id.content_main, new MainFragment());
         ht.commit();
     }
-    public void onBlog(){
+    public void onBlog(String url){
         drawerLayout.closeDrawers();
+        Fragment blog = new BlogFragment();
+        if (url != null){
+            Bundle bundle = new Bundle();
+            bundle.putString("url", "https://msfjarvis.me/");
+            blog.setArguments(bundle);
+        }
         Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, new BlogFragment());
+        ft.replace(R.id.content_main, blog);
         ft.commit();
     }
 
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                         selected = "home";
                         break;
                     case R.id.blog:
-                        onBlog();
+                        onBlog(null);
                         selected = "blog";
                         break;
                     case R.id.app_feedback:
@@ -180,18 +185,18 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params)
         {
             String result;
-           try
-            {
+            result = "";
+            try {
                 result = Pushy.register(MainActivity.this);
-            }
-            catch (PushyException exc)
-            {
-                result = exc.getMessage();
-            }
-            Log.d("Pushy", "Registration result: " + result);
+                SharedPreferences pref =
+                        PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("regID",result);
+                editor.apply();
 
-
-            return result;
+            }catch (PushyException exc){
+                exc.printStackTrace();
+            }            return result;
         }
 
         @Override
@@ -212,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.blog);
         }
     }
-
 }
 
 
