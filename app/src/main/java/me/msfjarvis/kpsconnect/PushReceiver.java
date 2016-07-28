@@ -8,12 +8,14 @@ import android.app.Notification;
 import android.media.RingtoneManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.util.Log;
 
 public class PushReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String notificationTitle = "KPS Connect";
         String notificationText = "Test notification";
+        String urlToLoad = "https://khaitanpublicschool.com/blog";
 
         if (intent.getStringExtra("message") != null) {
             notificationText = intent.getStringExtra("message");
@@ -21,25 +23,20 @@ public class PushReceiver extends BroadcastReceiver {
         if (intent.getStringExtra("title") != null){
             notificationTitle = intent.getStringExtra("title");
         }
-        Intent resultIntent = new Intent(context, MainActivity.class);
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        context,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
+        if (intent.getStringExtra("url") != null){
+            urlToLoad = intent.getStringExtra("url");
+            Log.d("TAG",urlToLoad);
+        }
 
         Notification.Builder NotifyBldr = new Notification.Builder(context)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationText)
-                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
         NotificationManager NotifyMgr = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
-        NotifyMgr.notify(1, NotifyBldr.build());
+        NotifyMgr.notify(0,NotifyBldr.build());
     }
 }
