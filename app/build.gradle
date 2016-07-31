@@ -9,8 +9,8 @@ android {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1155
-        versionName "1.5.5-beta"
+        versionCode 200
+        versionName "2.0.0-beta"
     }
     buildTypes {
          release {
@@ -32,6 +32,7 @@ dependencies {
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'com.github.florent37:materialtextfield:1.0.5'
+    compile 'com.afollestad:bridge:3.2.5'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile('com.mikepenz:aboutlibraries:5.7.0@aar') {
         transitive = true

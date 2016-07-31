@@ -26,13 +26,20 @@ import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     public NavigationView navigationView;
+    public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
+    public String result;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
@@ -76,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .show();
 }
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
         selected = "home";
         onHome();
         navigationView.setCheckedItem(R.id.home);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -184,8 +191,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params)
         {
-            String result;
-            result = "";
             try {
                 result = Pushy.register(MainActivity.this);
                 SharedPreferences pref =
@@ -196,13 +201,22 @@ public class MainActivity extends AppCompatActivity {
 
             }catch (PushyException exc){
                 exc.printStackTrace();
-            }            return result;
+            }
+            JSONObject postContent  = new JSONObject();
+            try{
+                postContent.put("id",result);
+            }catch (JSONException exc){
+                Toast.makeText(MainActivity.this,exc.toString(),Toast.LENGTH_LONG).show();
+            }
+            APIThread apiThread = new APIThread();
+            apiThread.run(BASE_URL,postContent);
+            return result;
         }
 
         @Override
         protected void onPostExecute(String result)
         {
-            // Activity died?
+
             if ( isFinishing() )
             {
                 return;
@@ -217,6 +231,8 @@ public class MainActivity extends AppCompatActivity {
             navigationView.setCheckedItem(R.id.blog);
         }
     }
+
 }
+
 
 
