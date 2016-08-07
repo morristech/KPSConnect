@@ -5,37 +5,21 @@
     <string name="drawer_close">Close</string>
     <string name="email">app@khaitanpublicschool.com</string>
     <string name="home">Home</string>
-    <string name="blog">Blog</string>
     <string name="trash">Trash</string>
     <string name="team">The Team</string>
     <string name="exit">Exit</string>
     <string name="title_activity_about">About KPS Connect</string>
-    <string name="connecting">Testing connection status....</string>
-    <string name="connection_is_a_go">Connection is a go! Welcome to KPS Connect!</string>
     <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
     <string name="is_first_run" translatable="false">is_first_run</string>
-    <string name="intro">Insert awesome intro text here</string>
-    <string name="progress_dialog">Loading…</string>
-    <string name="please_wait">Please Wait…</string>
-    <string name="wip">This section is still WIP, check back later!</string>
     <string name="subject">Subject</string>
     <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="message">Your message to us goes here</string>
-    <string name="send">SEND</string>
     <string name="emailid">Your email here</string>
     <string name="chooser_title">Choose an email client</string>
-    <string-array name="email">
-        <item>
-            "app@khaitanpublicschool.com"
-        </item>
-        <item>
-            "msfjarvis@gmail.com"
-        </item>
-    </string-array>
     <string name="aboutLibraries_description_showIcon">true</string>
-    <string name="aboutLibraries_description_showVersion">true</string>
-    <string name="aboutLibraries_description_text">KPS Connect is the dream child of Manika Pal, coded by hobbyist programmer Harsh Shandilya, better known as MSF Jarvis. It is a means to connect to the school, an easily accessible one, giving you one click access to the school blog, website, and handy forms to provide feedback for the app, and the school itself.</string>
+    <string name="aboutLibraries_description_showVersion">false</string>
+    <string name="aboutLibraries_description_text">Nothing much to talk about here, I\u0027m bad at marketing anyway.</string>
     <string name="slide_1_title">Welcome</string>
     <string name="slide_1_description">This setup wizard will walk you through the initial setup of KPS Connect</string>
 </resources>

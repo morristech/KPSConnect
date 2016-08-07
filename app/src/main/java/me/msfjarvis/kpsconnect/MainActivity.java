@@ -44,10 +44,6 @@ public class MainActivity extends AppCompatActivity {
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
         final Context context = this;
-        if ( getIntent() != null && getIntent().getStringExtra("url") != null){
-
-            onBlog(getIntent().getStringExtra("url"));
-        }
         new RegisterForPushNotificationsAsync().execute();
         new AppRate(this)
                 .setMinDaysUntilPrompt(3)
@@ -96,19 +92,6 @@ public class MainActivity extends AppCompatActivity {
         ht.replace(R.id.content_main, new MainFragment());
         ht.commit();
     }
-    public void onBlog(String url){
-        drawerLayout.closeDrawers();
-        Fragment blog = new BlogFragment();
-        if (url != null){
-            Bundle bundle = new Bundle();
-            bundle.putString("url", "https://msfjarvis.me/");
-            blog.setArguments(bundle);
-        }
-        Toast.makeText(getApplicationContext(),"Loading the blog may take some time depending on your connection",Toast.LENGTH_LONG).show();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, blog);
-        ft.commit();
-    }
 
     public void onFeedback(){
         Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
@@ -147,10 +130,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         onHome();
                         selected = "home";
-                        break;
-                    case R.id.blog:
-                        onBlog(null);
-                        selected = "blog";
                         break;
                     case R.id.app_feedback:
                         onFeedback();
@@ -227,8 +206,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (selected.equals("home")){
             navigationView.setCheckedItem(R.id.home);
-        }else if (selected.equals("blog")){
-            navigationView.setCheckedItem(R.id.blog);
         }
     }
 

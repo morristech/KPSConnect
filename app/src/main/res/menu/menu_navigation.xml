@@ -6,10 +6,6 @@
             android:title="@string/home"
             android:icon="@drawable/ic_home_black_24dp"/>
         <item
-            android:id="@+id/blog"
-            android:title="@string/blog"
-            android:icon="@drawable/ic_language_black_24dp"/>
-        <item
             android:id="@+id/about_kpsconnect"
             android:title="@string/title_activity_about"
             android:icon="@drawable/ic_info_black_24dp" />

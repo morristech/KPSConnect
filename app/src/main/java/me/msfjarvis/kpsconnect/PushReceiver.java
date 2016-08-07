@@ -2,20 +2,20 @@ package me.msfjarvis.kpsconnect;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.Color;
 import android.content.Context;
 import android.app.Notification;
-import android.media.RingtoneManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 public class PushReceiver extends BroadcastReceiver {
+    String notificationTitle = "KPS Connect";
+    String notificationText = "Test notification";
+    String urlToLoad = "https://khaitanpublicschool.com/blog";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        String notificationTitle = "KPS Connect";
-        String notificationText = "Test notification";
-        String urlToLoad = "https://khaitanpublicschool.com/blog";
 
         if (intent.getStringExtra("message") != null) {
             notificationText = intent.getStringExtra("message");
@@ -27,16 +27,20 @@ public class PushReceiver extends BroadcastReceiver {
             urlToLoad = intent.getStringExtra("url");
             Log.d("TAG",urlToLoad);
         }
-
-        Notification.Builder NotifyBldr = new Notification.Builder(context)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
+        Intent myIntent = new Intent(context, BlogActivity.class);
+        myIntent.putExtra("url",urlToLoad);
+        int requestID = (int) System.currentTimeMillis();
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        PendingIntent pIntent = PendingIntent.getActivity(context, requestID, myIntent, flags);
+        Notification noti = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_arrow_back_black_24dp)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationText)
+                .setContentIntent(pIntent)
                 .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-
-        NotificationManager NotifyMgr = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-
-        NotifyMgr.notify(0,NotifyBldr.build());
+                .build();
+        NotificationManager mNotificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, noti);
     }
 }
