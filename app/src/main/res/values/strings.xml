@@ -22,4 +22,5 @@
     <string name="aboutLibraries_description_text">Nothing much to talk about here, I\u0027m bad at marketing anyway.</string>
     <string name="slide_1_title">Welcome</string>
     <string name="slide_1_description">This setup wizard will walk you through the initial setup of KPS Connect</string>
+    <string name="dynamic_news_feed_image">Dynamic news feed image</string>
 </resources>
