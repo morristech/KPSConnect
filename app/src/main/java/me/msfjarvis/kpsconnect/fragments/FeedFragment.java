@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,9 @@ public class FeedFragment extends Fragment {
     private static Context currentContext;
 
     private Thread loadImagesThread;
+    private int currentI = 0;
+    private Bitmap currentBitmap;
+    private Handler handler;
 
     public static FeedFragment createInstance(Context context, ArrayList<String>... feeds) {
         currentContext = context;
@@ -39,6 +43,7 @@ public class FeedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        handler = new Handler();
         ScrollView finalView = new ScrollView(currentContext);
         LinearLayout listView = new LinearLayout(currentContext);
         finalView.addView(listView);
@@ -60,6 +65,12 @@ public class FeedFragment extends Fragment {
                             FeedFragmentStorage.getFeeds(FeedType.LINKS)[i], cardImages[i]
                     )
             );
+        final Runnable setImageRunnable = new Runnable() {
+            @Override
+            public void run() {
+                cardImages[currentI].setImageBitmap(currentBitmap);
+            }
+        };
         Runnable loadImagesRunnable = new Runnable() {
             @Override
             public void run() {
@@ -68,7 +79,9 @@ public class FeedFragment extends Fragment {
                         InputStream inputStream = DownloadUtils.getInputStreamForConnection(
                                 FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]
                         );
-                        cardImages[i].setImageBitmap(BitmapFactory.decodeStream(inputStream));
+                        currentI = i;
+                        currentBitmap = BitmapFactory.decodeStream(inputStream);
+                        handler.post(setImageRunnable);
                     } catch(Exception ex) {
                         ex.printStackTrace();
                         Log.d("KPSConnect", "Failed load of image " +
