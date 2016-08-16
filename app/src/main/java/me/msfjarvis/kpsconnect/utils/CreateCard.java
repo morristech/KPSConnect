@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,11 +22,11 @@ public class CreateCard extends Activity {
     }
 
     public static CardView newCard(final Context mContext, final Activity activity,
-                            int mRadius, int mPadding,
-                            int mMaxElevation, int mElevation, String mBackgroundColor,
-                            String mTitle, int mTitleSize, String mTitleColor,
-                            String mCategory, int mCatSize, String mCatColor,
-                            final String onClickURL) {
+                                   int mRadius, int mPadding,
+                                   int mMaxElevation, int mElevation, String mBackgroundColor,
+                                   String mTitle, int mTitleSize, String mTitleColor,
+                                   String mCategory, int mCatSize, String mCatColor,
+                                   final String onClickURL, ImageView imageView) {
         CardView card = new CardView(mContext);
         RelativeLayout inner = new RelativeLayout(mContext);
         LinearLayout.LayoutParams innerParams = new LinearLayout.LayoutParams(
@@ -41,6 +42,10 @@ public class CreateCard extends Activity {
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
         RelativeLayout.LayoutParams tvcParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
@@ -64,9 +69,15 @@ public class CreateCard extends Activity {
         tv.invalidate();
         //noinspection ResourceType
         tv.setId(1092814);
+        //noinspection ResourceType
+        imageView.setId(1092816);
+        imgParams.addRule(RelativeLayout.BELOW, tv.getId());
+        imgParams.setMargins(0, tvMargins, 0, tvMargins);
+        imageView.setLayoutParams(imgParams);
+        inner.addView(imageView);
         TextView tvc = new TextView(mContext);
         tvcParams.setMargins(tvMargins, tvMargins*2, tvMargins, tvMargins);
-        tvcParams.addRule(RelativeLayout.BELOW, tv.getId());
+        tvcParams.addRule(RelativeLayout.BELOW, imageView.getId());
         tvc.setLayoutParams(tvcParams);
         tvc.setText(mCategory);
         tvc.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mCatSize);

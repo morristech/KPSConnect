@@ -1,16 +1,23 @@
 package me.msfjarvis.kpsconnect.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import org.xdevs23.net.DownloadUtils;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import me.msfjarvis.kpsconnect.utils.CreateCard;
@@ -21,6 +28,8 @@ import static me.msfjarvis.kpsconnect.utils.CreateCard.dpToPx;
 public class FeedFragment extends Fragment {
 
     private static Context currentContext;
+
+    private Thread loadImagesThread;
 
     public static FeedFragment createInstance(Context context, ArrayList<String>... feeds) {
         currentContext = context;
@@ -36,6 +45,9 @@ public class FeedFragment extends Fragment {
         listView.setOrientation(LinearLayout.VERTICAL);
         listView.setDividerDrawable(new ColorDrawable(Color.TRANSPARENT));
         listView.setDividerPadding(dpToPx(currentContext, 12));
+        final ImageView cardImages[] = new ImageView[FeedFragmentStorage.getFeeds(FeedType.TITLES).length];
+        for ( int i = 0; i < cardImages.length; i++ )
+            cardImages[i] = new ImageView(currentContext);
         for ( int i = 0; i < FeedFragmentStorage.getFeeds(FeedType.TITLES).length; i++ )
             listView.addView(
                     CreateCard.newCard(
@@ -45,10 +57,28 @@ public class FeedFragment extends Fragment {
                             "#fefefe",
                             FeedFragmentStorage.getFeeds(FeedType.TITLES)[i], 18, "#010101",
                             FeedFragmentStorage.getFeeds(FeedType.CATEGORIES)[i], 14, "#0f0f0f",
-                            FeedFragmentStorage.getFeeds(FeedType.LINKS)[i]
+                            FeedFragmentStorage.getFeeds(FeedType.LINKS)[i], cardImages[i]
                     )
             );
-
+        Runnable loadImagesRunnable = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < FeedFragmentStorage.getFeeds(FeedType.IMAGES).length; i++) {
+                    try {
+                        InputStream inputStream = DownloadUtils.getInputStreamForConnection(
+                                FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]
+                        );
+                        cardImages[i].setImageBitmap(BitmapFactory.decodeStream(inputStream));
+                    } catch(Exception ex) {
+                        ex.printStackTrace();
+                        Log.d("KPSConnect", "Failed load of image " +
+                            FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]);
+                    }
+                }
+            }
+        };
+        loadImagesThread = new Thread(loadImagesRunnable);
+        loadImagesThread.start();
         return finalView;
     }
 

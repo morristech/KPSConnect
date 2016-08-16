@@ -10,7 +10,8 @@ public class FeedFragmentStorage {
         public static final int
                     TITLES      = 0,
                     CATEGORIES  = 1,
-                    LINKS       = 2
+                    LINKS       = 2,
+                    IMAGES      = 3
                             ;
     }
 

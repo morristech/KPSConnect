@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     }
 
-    public void onHome(){
+    public void onHome() {
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
@@ -141,14 +141,17 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final ArrayList<String> rssTitles = new ArrayList<>();
         final ArrayList<String> rssCategories = new ArrayList<>();
         final ArrayList<String> rssLinks = new ArrayList<>();
+        final ArrayList<String> rssImages = new ArrayList<>();
         for (RssItem rssItem : rssItems) {
             rssTitles.add(rssItem.getTitle());
             rssCategories.add(rssItem.getCategory());
             rssLinks.add(rssItem.getLink());
+            rssImages.add(rssItem.getImageUrl());
         }
+        //noinspection unchecked
         currentFeedFragmentInstance = FeedFragment.createInstance(
                 getApplicationContext(),
-                rssTitles, rssCategories, rssLinks
+                rssTitles, rssCategories, rssLinks, rssImages
         );
         onHome();
     }
