@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,18 +27,26 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import me.msfjarvis.apprate.AppRate;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
+import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
+import me.msfjarvis.kpsconnect.rssmanager.RssItem;
+import me.msfjarvis.kpsconnect.rssmanager.RssReader;
 import me.msfjarvis.kpsconnect.utils.APIThread;
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     public NavigationView navigationView;
     public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
     public String result;
+
+    private FeedFragment currentFeedFragmentInstance;
 
 
     @Override
@@ -87,12 +96,15 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
         initNavigationDrawer();
+        loadFeeds("http://khaitanpublicschool.com/blog/feed/");
 
     }
+
     public void onHome(){
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, FeedFragment.createInstance(getApplicationContext()));
+        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
+                                    :  currentFeedFragmentInstance));
         ht.commit();
     }
 
@@ -112,6 +124,38 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment);
         ft.commit();
+    }
+
+    //load feeds
+    private void loadFeeds(String url) {
+        String[] urlArr = {url};
+
+        new RssReader(MainActivity.this)
+                .showDialog(true)
+                .urls(urlArr)
+                .parse(this);
+    }
+
+    @Override
+    public void onSuccess(List<RssItem> rssItems) {
+        final ArrayList<String> rssTitles = new ArrayList<>();
+        final ArrayList<String> rssCategories = new ArrayList<>();
+        final ArrayList<String> rssLinks = new ArrayList<>();
+        for (RssItem rssItem : rssItems) {
+            rssTitles.add(rssItem.getTitle());
+            rssCategories.add(rssItem.getCategory());
+            rssLinks.add(rssItem.getLink());
+        }
+        currentFeedFragmentInstance = FeedFragment.createInstance(
+                getApplicationContext(),
+                rssTitles, rssCategories, rssLinks
+        );
+        onHome();
+    }
+
+    @Override
+    public void onFailure(String message) {
+        Toast.makeText(MainActivity.this, "Error:\n" + message, Toast.LENGTH_SHORT).show();
     }
 
     String selected = "";

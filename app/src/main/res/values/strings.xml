@@ -24,4 +24,6 @@
     <string name="slide_1_title">Welcome</string>
     <string name="slide_1_description">This setup wizard will walk you through the initial setup of KPS Connect</string>
     <string name="dynamic_news_feed_image">Dynamic news feed image</string>
+    <string name="loading_feeds">Loading feeds</string>
+    <string name="cancel">Cancel</string>
 </resources>
