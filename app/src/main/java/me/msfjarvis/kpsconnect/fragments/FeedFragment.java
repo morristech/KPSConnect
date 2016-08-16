@@ -8,15 +8,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.xdevs23.ui.view.listview.XDListView;
 
 import java.util.ArrayList;
-
-import me.msfjarvis.kpsconnect.R;
 
 import static me.msfjarvis.kpsconnect.fragments.FeedFragmentStorage.FeedType;
 
