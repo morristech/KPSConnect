@@ -11,8 +11,8 @@ import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
 
-import me.msfjarvis.kpsconnect.fragments.IntroSubscriptionSlideFragment;
 import me.msfjarvis.kpsconnect.R;
+import me.msfjarvis.kpsconnect.fragments.IntroSubscriptionSlideFragment;
 
 public class MainIntroActivity extends IntroActivity {
     @Override

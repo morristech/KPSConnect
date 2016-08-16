@@ -15,19 +15,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import com.mikepenz.aboutlibraries.*;
-import android.view.View;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
 import com.afollestad.materialdialogs.MaterialDialog;
-import me.msfjarvis.apprate.AppRate;
-import me.msfjarvis.kpsconnect.utils.APIThread;
-import me.pushy.sdk.Pushy;
-import me.pushy.sdk.exceptions.PushyException;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import me.msfjarvis.apprate.AppRate;
+import me.msfjarvis.kpsconnect.fragments.FeedFragment;
+import me.msfjarvis.kpsconnect.utils.APIThread;
+import me.pushy.sdk.Pushy;
+import me.pushy.sdk.exceptions.PushyException;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     public void onHome(){
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, new me.msfjarvis.kpsconnect.MainFragment());
+        ht.replace(R.id.content_main, FeedFragment.createInstance(getApplicationContext()));
         ht.commit();
     }
 
