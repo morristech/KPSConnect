@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
         final Context context = this;
-        new RegisterForPushNotificationsAsync().execute();
         new AppRate(this)
                 .setMinDaysUntilPrompt(3)
                 .setMinLaunchesUntilPrompt(5)
@@ -57,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
+                new RegisterForPushNotificationsAsync().execute();
                 SharedPreferences pref =
                         PreferenceManager.getDefaultSharedPreferences(this);
                 String is_first_run = pref.getString("is_first_run","n/a");
