@@ -1,10 +1,12 @@
-package me.msfjarvis.kpsconnect;
+package me.msfjarvis.kpsconnect.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import me.msfjarvis.kpsconnect.R;
 
 public class IntroSubscriptionSlideFragment extends Fragment {
     @Override

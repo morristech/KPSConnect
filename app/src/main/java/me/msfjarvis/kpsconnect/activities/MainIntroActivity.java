@@ -1,4 +1,4 @@
-package me.msfjarvis.kpsconnect;
+package me.msfjarvis.kpsconnect.activities;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
+
+import me.msfjarvis.kpsconnect.fragments.IntroSubscriptionSlideFragment;
+import me.msfjarvis.kpsconnect.R;
 
 public class MainIntroActivity extends IntroActivity {
     @Override

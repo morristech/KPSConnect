@@ -1,4 +1,4 @@
-package me.msfjarvis.kpsconnect;
+package me.msfjarvis.kpsconnect.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
+
+import me.msfjarvis.kpsconnect.R;
 
 
 public class AppFeedbackActivity extends AppCompatActivity {

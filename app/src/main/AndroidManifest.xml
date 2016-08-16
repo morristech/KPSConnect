@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AppFeedbackActivity"
+            android:name=".activities.AppFeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainIntroActivity"
+            android:name=".activities.MainIntroActivity"
             android:label="@string/title_activity_feedback"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -49,7 +49,7 @@
         <!-- Pushy Notification Receiver -->
         <!-- Incoming push notifications will invoke the following BroadcastReceiver -->
         <receiver
-            android:name=".PushReceiver"
+            android:name=".recievers.PushReceiver"
             android:exported="false">
             <intent-filter>
 
@@ -81,16 +81,6 @@
         <!-- Do not modify - internal socket service -->
         <service android:name="me.pushy.sdk.services.PushySocketService" />
         <!-- End Pushy Declarations -->
-        <activity android:name=".BlogActivity"
-            android:label="Blog"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="me.msfjarvis.kpsconnect.BLOGACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-        </activity>
     </application>
 
 </manifest>

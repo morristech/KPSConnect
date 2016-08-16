@@ -1,4 +1,4 @@
-package me.msfjarvis.kpsconnect;
+package me.msfjarvis.kpsconnect.utils;
 
 import android.util.Log;
 

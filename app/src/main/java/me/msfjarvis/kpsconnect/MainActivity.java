@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import me.msfjarvis.apprate.AppRate;
+import me.msfjarvis.kpsconnect.utils.APIThread;
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     public void onHome(){
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, new MainFragment());
+        ht.replace(R.id.content_main, new me.msfjarvis.kpsconnect.MainFragment());
         ht.commit();
     }
 

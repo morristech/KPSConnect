@@ -14,6 +14,7 @@
     <string name="subject">Subject</string>
     <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
     <string name="title_activity_feedback">Feedback</string>
+    <string name="title">Subject</string>
     <string name="message">Your message to us goes here</string>
     <string name="emailid">Your email here</string>
     <string name="chooser_title">Choose an email client</string>
