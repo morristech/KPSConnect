@@ -197,8 +197,22 @@ public class RssReader implements OnFeedLoadListener {
             imageUrl = element.select(MEDIA_CONTENT).attr(URL);
         } else if (!element.select(IMAGE).isEmpty()) {
             imageUrl = element.select(IMAGE).attr(URL);
+        } else if (!element.select(IMAGE).select(URL).isEmpty()) {
+            imageUrl = element.select(IMAGE).select(URL).text();
         } else {
-            imageUrl = null;
+            String desc = element.select(DESCRIPTION).text();
+            try {
+                imageUrl =
+                        desc.substring(desc.indexOf(" src=\"") + 6, desc.indexOf(".png") + 4);
+            } catch(Exception ex) {
+                try {
+                    imageUrl =
+                            desc.substring(desc.indexOf(" src=\"") + 6, desc.indexOf(".jpg") + 4);
+                } catch(Exception ex2) {
+                    ex2.printStackTrace();
+                    imageUrl = null;
+                }
+            }
         }
         String category = null;
         if (mCategories == null) {
