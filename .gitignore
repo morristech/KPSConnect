@@ -5,3 +5,4 @@ app/build/
 *.iml
 extras/keystore/keystore.properties
 *~
+local.properties
