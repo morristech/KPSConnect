@@ -19,17 +19,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
-
+//TODO:Use exact class name here
+import com.mikepenz.aboutlibraries.*;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import me.msfjarvis.apprate.AppRate;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
@@ -119,11 +115,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         drawerLayout.closeDrawers();
     }
     public void onAbout(){
-        LibsSupportFragment fragment = new LibsBuilder()
-                .supportFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_main, fragment);
-        ft.commit();
+        new LibsBuilder()
+            .withActivityStyle(Libs.ActivityStyle.LIGHT)
+            .start(MainActivity.this);
     }
 
     //load feeds
