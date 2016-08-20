@@ -1,0 +1,2 @@
+release:
+	bash buildReleaseApp.sh
