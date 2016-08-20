@@ -6,3 +6,5 @@ app/build/
 extras/keystore/keystore.properties
 *~
 local.properties
+app/app-release.apk
+app/app-debug.apk
