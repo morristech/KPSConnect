@@ -20,6 +20,16 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
         app:title="@string/title_activity_feedback" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/email"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:hint="@string/emailid"
+        app:met_floatingLabel="normal" />
+
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/subject"
         android:layout_width="300dp"

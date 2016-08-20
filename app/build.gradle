@@ -9,18 +9,17 @@ android {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 250
-        versionName "2.5.0-beta"
+        versionCode 300
+        versionName "3.0.0-beta"
     }
     signingConfigs
     {
         release
         {
-            // Obtain Password and Alias
-            storeFile file("../${project.property('keystore.file')}")
-            storePassword ""
-            keyAlias ""
-            keyPassword ""
+            storeFile file("../extras/keystore/keystore.jks")
+            storePassword System.getenv("KPSCONNECT_KEYSTORE_PASSWD")
+            keyAlias "MSFJarvis"
+            keyPassword System.getenv("KPSCONNECT_KEY_PASSWD")
         }
     }
 
@@ -63,44 +62,4 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3']
     )
-}
-
-task askForPasswords <<
-{
-	def storePass
-	def keyAlias
-	def keyPass
-
-	def keystorePropertiesFile = new File(project.property("keystore.properties"))
-
-	if(project.hasProperty("keystore.properties") && keystorePropertiesFile.exists())
-	{
-		println "Loading keystore passwords from property file..."
-		Properties properties = new Properties()
-		properties.load(new FileInputStream(keystorePropertiesFile))
-		storePass = properties['keystore.store.password']
-		keyAlias  = properties['keystore.key.alias']
-		keyPass  = properties['keystore.key.password']
-	}
-	else
-	{
-		println "Getting keystore passwords..."
-		storePass = new String(System.console().readPassword("\nStore password: "))
-		keyAlias  = new String(System.console().readLine("Key alias: "))
-		keyPass  = new String(System.console().readPassword("Key password: "))
-	}
-
-	android.signingConfigs.release.storePassword = storePass
-	android.signingConfigs.release.keyAlias = keyAlias
-	android.signingConfigs.release.keyPassword = keyPass
-}
-
-
-tasks.whenTaskAdded
-{
-	theTask ->
-	if(theTask.name.equals("packageRelease"))
-	{
-		theTask.dependsOn "askForPasswords"
-	}
 }
