@@ -23,7 +23,7 @@ android:
     - '.+'
 
 script:
-    - ./gradlew clean assemble --stacktrace --info
+    - ./gradlew clean assembleDebug --stacktrace --info
 
 notifications:
   email: true
