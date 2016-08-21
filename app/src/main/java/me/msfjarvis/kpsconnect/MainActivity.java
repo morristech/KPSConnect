@@ -20,8 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
-//TODO:Use exact class name here
-import com.mikepenz.aboutlibraries.*;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
