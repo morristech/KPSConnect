@@ -56,11 +56,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
         final Context context = this;
-        new AppRate(this)
-                .setMinDaysUntilPrompt(3)
-                .setMinLaunchesUntilPrompt(5)
-                .setShowIfAppHasCrashed(false)
-                .init();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
