@@ -26,11 +26,11 @@ public class FeedFragment extends Fragment {
 
     private static Context currentContext;
 
-    private Thread loadImagesThread;
     private int currentI = 0;
     private Bitmap currentBitmap;
     private Handler handler;
 
+    @SafeVarargs
     public static FeedFragment createInstance(Context context, ArrayList<String>... feeds) {
         currentContext = context;
         FeedFragmentStorage.setFeeds(feeds);
@@ -86,7 +86,7 @@ public class FeedFragment extends Fragment {
                 }
             }
         };
-        loadImagesThread = new Thread(loadImagesRunnable);
+        Thread loadImagesThread = new Thread(loadImagesRunnable);
         loadImagesThread.start();
         return finalView;
     }

@@ -24,16 +24,17 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
-import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
+import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
 import me.msfjarvis.kpsconnect.utils.APIThread;
+
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
 
@@ -41,11 +42,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     public NavigationView navigationView;
-    public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
+    public static final String BASE_URL = "http://api.msfjarvis.me:2015/regids/register";
+    public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
     public String result;
-
     private FeedFragment currentFeedFragmentInstance;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +60,21 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-                new RegisterForPushNotificationsAsync().execute();
-                SharedPreferences pref =
-                        PreferenceManager.getDefaultSharedPreferences(this);
-                String is_first_run = pref.getString("is_first_run","n/a");
-                if (is_first_run.equals("n/a")) {
-                    Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
-                    startActivity(introIntent);
-                    SharedPreferences.Editor edit = pref.edit();
-                    edit.putString("is_first_run", "one");
-                    edit.apply();
-                }
+            new RegisterForPushNotificationsAsync().execute();
+            SharedPreferences pref =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            String is_first_run = pref.getString("is_first_run","n/a");
+            if (is_first_run.equals("n/a")) {
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putString("is_first_run", "one");
+                edit.apply();
+                Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
+                startActivity(introIntent);
+            }
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            toolbar.inflateMenu(R.menu.menu_main);
+            initNavigationDrawer();
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
@@ -83,14 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         }
                     })
                     .show();
-}
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.inflateMenu(R.menu.menu_main);
-        initNavigationDrawer();
-        loadFeeds("http://khaitanpublicschool.com/blog/feed/");
-
+        }
     }
 
     public void onHome() {
@@ -99,19 +96,33 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                                     :  currentFeedFragmentInstance));
         ht.commit();
+        loadFeeds(FEED_URL);
+    }
+    public void onSotd(){
+        drawerLayout.closeDrawers();
+        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
+        ht.replace(R.id.content_main, new SOTDFragment());
+        ht.commit();
+    }
+    public void onEotd(){
+        drawerLayout.closeDrawers();
+        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
+        ht.replace(R.id.content_main, new EOTDFragment());
+        ht.commit();
     }
 
     public void onFeedback(){
+        drawerLayout.closeDrawers();
         Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
         try {
             startActivity(feedbackIntent);
-        }catch (Exception e){
+        }catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MainActivity.this,R.string.oops,Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.oops, Toast.LENGTH_SHORT).show();
         }
-        drawerLayout.closeDrawers();
     }
     public void onAbout(){
+        drawerLayout.closeDrawers();
         LibsSupportFragment fragment = new LibsBuilder()
                 .supportFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -146,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages
         );
-        onHome();
     }
 
     @Override
@@ -160,9 +170,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
         assert navigationView != null;
         selected = "home";
-        onHome();
         navigationView.setCheckedItem(R.id.home);
-
+        onHome();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -180,7 +189,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         break;
                     case R.id.about_kpsconnect:
                         onAbout();
-                        drawerLayout.closeDrawers();
+                        break;
+                    case R.id.sotd:
+                        onSotd();
+                        break;
+                    case R.id.eotd:
+                        onEotd();
                         break;
                     case R.id.logout:
                         finish();
@@ -224,14 +238,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             }catch (PushyException exc){
                 exc.printStackTrace();
             }
-            JSONObject postContent  = new JSONObject();
-            try{
-                postContent.put("id",result);
-            }catch (JSONException exc){
-                Toast.makeText(MainActivity.this,exc.toString(),Toast.LENGTH_LONG).show();
-            }
             APIThread apiThread = new APIThread();
-            apiThread.run(BASE_URL,postContent);
+            apiThread.run(BASE_URL,result);
             return result;
         }
 

@@ -7,12 +7,10 @@ import android.view.View;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.app.OnNavigationBlockedListener;
-import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
 import com.heinrichreimersoftware.materialintro.slide.SimpleSlide;
 import com.heinrichreimersoftware.materialintro.slide.Slide;
 
 import me.msfjarvis.kpsconnect.R;
-import me.msfjarvis.kpsconnect.fragments.IntroSubscriptionSlideFragment;
 
 public class MainIntroActivity extends IntroActivity {
     @Override
@@ -32,12 +30,6 @@ public class MainIntroActivity extends IntroActivity {
                 .build();
 
         addSlide(permissionsSlide);
-
-        addSlide(new FragmentSlide.Builder()
-                .fragment(new IntroSubscriptionSlideFragment())
-                .background(R.color.colorPrimary)
-                .build());
-
         addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
             @Override
             public void onNavigationBlocked(int position, int direction) {

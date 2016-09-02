@@ -1,29 +1,20 @@
 <resources>
     <string name="app_name">KPS Connect</string>
-    <string name="settings">Settings</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="email">app@khaitanpublicschool.com</string>
     <string name="home">Home</string>
-    <string name="trash">Trash</string>
-    <string name="team">The Team</string>
     <string name="exit">Exit</string>
     <string name="title_activity_about">About KPS Connect</string>
     <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
-    <string name="is_first_run" translatable="false">is_first_run</string>
-    <string name="subject">Subject</string>
     <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
     <string name="title_activity_feedback">Feedback</string>
     <string name="title">Subject</string>
     <string name="message">Your message to us goes here</string>
-    <string name="emailid">Your email here</string>
-    <string name="chooser_title">Choose an email client</string>
-    <string name="aboutLibraries_description_showIcon">true</string>
-    <string name="aboutLibraries_description_showVersion">false</string>
-    <string name="aboutLibraries_description_text">Nothing much to talk about here, I\u0027m bad at marketing anyway.</string>
     <string name="slide_1_title">Welcome</string>
-    <string name="slide_1_description">This setup wizard will walk you through the initial setup of KPS Connect</string>
-    <string name="dynamic_news_feed_image">Dynamic news feed image</string>
+    <string name="slide_1_description">Welcome to KPS Connect! Over time you\u0027ll see this intro become more functional, stay tuned!</string>
     <string name="loading_feeds">Loading feeds</string>
     <string name="cancel">Cancel</string>
+    <string name="sotd">Student Of The Day</string>
+    <string name="eotd">Event Of The Day</string>
+    <string name="email">app@khaitanpublicschool.com</string>
 </resources>

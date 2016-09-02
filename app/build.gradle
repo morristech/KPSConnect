@@ -12,41 +12,49 @@ android {
         versionCode 300
         versionName "3.0.0-beta"
     }
+signingConfigs
+            {
+                release
+                        {
+                            storeFile file("../extras/keystore/keystore.jks")
+                            storePassword System.getenv("KPSCONNECT_KEYSTORE_PASSWD")
+                            keyAlias "MSFJarvis"
+                            keyPassword System.getenv("KPSCONNECT_KEY_PASSWD")
+                        }
+            }
     buildTypes {
-         release {
+        release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources true
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     lintOptions {
         abortOnError false // Ignore translation stuff and annoying warnings
     }
-
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    compile('com.afollestad.material-dialogs:core:0.9.0.1@aar') {
+        transitive = true
+    }
+    compile('com.mikepenz:aboutlibraries:5.7.0@aar') {
+        transitive = true
+    }
+    compile(
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3']
+    )
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:cardview-v7:24.2.0'
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile 'org.jsoup:jsoup:1.7.2'
-    compile('com.afollestad.material-dialogs:core:0.9.0.1@aar') {
-        transitive = true
-    }
     compile 'com.afollestad:bridge:3.2.5'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile('com.mikepenz:aboutlibraries:5.7.0@aar') {
-        transitive = true
-    }
     compile 'me.pushy:sdk:1.0.10'
-    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.heinrichreimersoftware:material-intro:1.5.7'
-    compile(
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3']
-    )
 }
