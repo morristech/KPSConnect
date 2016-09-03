@@ -21,6 +21,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.afollestad.bridge.Bridge;
+import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
@@ -33,7 +36,6 @@ import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
-import me.msfjarvis.kpsconnect.utils.APIThread;
 
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
@@ -92,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onHome() {
         drawerLayout.closeDrawers();
+        loadFeeds(FEED_URL);
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
-                                    :  currentFeedFragmentInstance));
+                :  currentFeedFragmentInstance));
         ht.commit();
-        loadFeeds(FEED_URL);
     }
     public void onSotd(){
         drawerLayout.closeDrawers();
@@ -152,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             rssLinks.add(rssItem.getLink());
             rssImages.add(rssItem.getImageUrl());
         }
-        //noinspection unchecked
         currentFeedFragmentInstance = FeedFragment.createInstance(
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages
@@ -188,12 +189,15 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
+                        selected = "about_kpsconnect";
                         onAbout();
                         break;
                     case R.id.sotd:
+                        selected = "sotd";
                         onSotd();
                         break;
                     case R.id.eotd:
+                        selected = "eotd";
                         onEotd();
                         break;
                     case R.id.logout:
@@ -234,12 +238,15 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putString("regID",result);
                 editor.apply();
-
+                Bridge
+                        .post(BASE_URL)
+                        .header("regID",result)
+                        .request();
             }catch (PushyException exc){
-                exc.printStackTrace();
+                Log.d("Pushy",exc.toString());
+            }catch (BridgeException exc){
+                Log.d("Bridge",exc.toString());
             }
-            APIThread apiThread = new APIThread();
-            apiThread.run(BASE_URL,result);
             return result;
         }
 
@@ -251,8 +258,19 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
     public void onResume(){
         super.onResume();
-        if (selected.equals("home")){
-            navigationView.setCheckedItem(R.id.home);
+        switch (selected){
+            case "home":
+                navigationView.setCheckedItem(R.id.home);
+                break;
+            case "about_kpsconnect":
+                navigationView.setCheckedItem(R.id.about_kpsconnect);
+                break;
+            case "eotd":
+                navigationView.setCheckedItem(R.id.eotd);
+                break;
+            case "sotd":
+                navigationView.setCheckedItem(R.id.sotd);
+                break;
         }
     }
 

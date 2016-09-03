@@ -57,7 +57,7 @@ public class FeedFragment extends Fragment {
                             dpToPx(currentContext, 4), dpToPx(currentContext, 4),
                             "#fefefe",
                             FeedFragmentStorage.getFeeds(FeedType.TITLES)[i], 18, "#010101",
-                            FeedFragmentStorage.getFeeds(FeedType.CATEGORIES)[i], 14, "#0f0f0f",
+                            FeedFragmentStorage.getFeeds(FeedType.CATEGORIES)[i], 14, "#808080",
                             FeedFragmentStorage.getFeeds(FeedType.LINKS)[i], cardImages[i]
                     )
             );

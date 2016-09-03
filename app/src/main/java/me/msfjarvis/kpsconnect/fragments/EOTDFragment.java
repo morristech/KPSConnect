@@ -1,91 +1,43 @@
 package me.msfjarvis.kpsconnect.fragments;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import org.xdevs23.net.DownloadUtils;
+import android.widget.RelativeLayout;
+import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import static me.msfjarvis.kpsconnect.utils.CreateCard.dpToPx;
 
 public class EOTDFragment extends Fragment {
-    public String IMAGE_URL="http://kpsconnect.msfjarvis.me:2015/eotd/image.jpeg";
-    public String DESC_URL = "http://kpsconnect.msfjarvis.me:2015/eotd/desc.txt";
-    private Bitmap currentBitmap;
-    private String currentString;
+    public String IMAGE_URL = "http://kpsconnect.msfjarvis.me:2015/eotd/image.jpeg";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LinearLayout layout = new LinearLayout(getContext());
+        CardView imageCard = new CardView(getContext());
+        RelativeLayout.LayoutParams cardParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        RelativeLayout.LayoutParams imgParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        int cm = dpToPx(getContext(), 16);
+        cardParams.setMargins(cm, cm, cm, cm);
+        imageCard.setLayoutParams(cardParams);
+        imageCard.setContentPadding(8,8,8,8);
+        imageCard.setRadius(8);
+        imageCard.setCardElevation(4);
         final ImageView eotdImageView = new ImageView(getContext());
-        final TextView eotdTextView = new TextView(getContext());
-        eotdImageView.setPadding(16,16,16,16);
-        eotdTextView.setPadding(16,16,16,16);
-        final Handler handler = new Handler();
-        final Runnable setImageRunnable = new Runnable() {
-            @Override
-            public void run() {
-                eotdImageView.setImageBitmap(currentBitmap);
-            }
-        };
-        final Runnable setDescRunnable = new Runnable() {
-            @Override
-            public void run() {
-                eotdTextView.setText(currentString);
-            }
-        };
-        Runnable loadImagesRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    InputStream inputStream = DownloadUtils.getInputStreamForConnection(
-                            IMAGE_URL
-                    );
-                    currentBitmap = BitmapFactory.decodeStream(inputStream);
-                    handler.post(setImageRunnable);
-                } catch(Exception ex) {
-                    ex.printStackTrace();
-                    Log.d("KPSConnect", "Failed load of image " +
-                            IMAGE_URL);
-                }
-            }
-        };
-        Runnable loadDescriptionRunnable = new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    InputStream inputStream = DownloadUtils.getInputStreamForConnection(
-                            DESC_URL
-                    );
-                    BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-                    while ((line = r.readLine()) != null) {
-                        currentString.concat(line);
-                    }
-                    handler.post(setDescRunnable);
-                }catch (Exception exc){
-                    Log.d("KPSConnect", "Failed load of desc " +
-                            DESC_URL);
-                }
-            }
-        };
-        Thread loadImagesThread = new Thread(loadImagesRunnable);
-        loadImagesThread.start();
-        Thread loadDescriptionThread = new Thread(loadDescriptionRunnable);
-        loadDescriptionThread.start();
-        layout.addView(eotdImageView);
-        layout.addView(eotdTextView);
-        return layout;
+        eotdImageView.setLayoutParams(imgParams);
+        eotdImageView.setPadding(16, 16, 16, 16);
+        Picasso.with(getContext()).load(IMAGE_URL).into(eotdImageView);
+        imageCard.addView(eotdImageView);
+        return imageCard;
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class CreateCard extends Activity {
+
     public static int dpToPx(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
@@ -49,7 +50,7 @@ public class CreateCard extends Activity {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-        int cm = dpToPx(mContext, 4);
+        int cm = dpToPx(mContext, 16);
         cardParams.setMargins(cm, cm, cm, cm);
         inner.setLayoutParams(innerParams);
         card.setLayoutParams(cardParams);
@@ -76,7 +77,7 @@ public class CreateCard extends Activity {
         imageView.setLayoutParams(imgParams);
         inner.addView(imageView);
         TextView tvc = new TextView(mContext);
-        tvcParams.setMargins(tvMargins, tvMargins*2, tvMargins, tvMargins);
+        tvcParams.setMargins(tvMargins, tvMargins * 2, tvMargins, tvMargins);
         tvcParams.addRule(RelativeLayout.BELOW, imageView.getId());
         tvc.setLayoutParams(tvcParams);
         tvc.setText(mCategory);
@@ -90,8 +91,8 @@ public class CreateCard extends Activity {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(onClickURL));
                 try {
                     activity.startActivity(intent);
-                } catch(ActivityNotFoundException exc) {
-                    Toast.makeText(view.getContext(), exc.toString(),Toast.LENGTH_LONG).show();
+                } catch (ActivityNotFoundException exc) {
+                    Toast.makeText(view.getContext(), exc.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
