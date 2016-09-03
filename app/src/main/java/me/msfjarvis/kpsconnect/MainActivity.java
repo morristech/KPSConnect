@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onHome() {
         drawerLayout.closeDrawers();
-        loadFeeds(FEED_URL);
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
         ht.commit();
+        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
     }
     public void onSotd(){
         drawerLayout.closeDrawers();
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages
         );
+	onHome();
     }
 
     @Override
