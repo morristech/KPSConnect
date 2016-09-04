@@ -4,7 +4,7 @@
     <string name="drawer_close">Close</string>
     <string name="home">Home</string>
     <string name="exit">Exit</string>
-    <string name="title_activity_about">Used Libaries</string>
+    <string name="title_activity_about">Used Libraries</string>
     <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
     <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
     <string name="title_activity_feedback">Feedback</string>
