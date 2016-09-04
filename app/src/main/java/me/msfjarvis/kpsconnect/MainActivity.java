@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
 
-    public void onHome(boolean showDialog) {
+    public void onHome() {
         if(isPaused) return;
         Log.d("KPSConnect", "Called home!");
         drawerLayout.closeDrawers();
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         ht.commit();
         Log.d("KPSConnect", "Is the current feed fragment instance null? " +
                 (currentFeedFragmentInstance == null));
-        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL, false);
+        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
     }
     public void onSotd() {
         if(isPaused) return;
@@ -149,14 +149,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
     //load feeds
-    private void loadFeeds(String url, boolean showDialog) {
+    private void loadFeeds(String url) {
         if(areFeedsLoading) return;
         Log.d("KPSConnect", "Loading feeds...");
         areFeedsLoading = true;
         String[] urlArr = {url};
 
         new RssReader(MainActivity.this)
-                .showDialog(showDialog)
+                .showDialog(false)
                 .urls(urlArr)
                 .parse(this);
     }
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         );
         areFeedsLoading = false;
         Log.d("KPSConnect", "Calling home!");
-        onHome(false);
+        onHome();
     }
 
     @Override
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.home:
-                        onHome(false);
+                        onHome();
                         selected = "home";
                         break;
                     case R.id.app_feedback:
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        onHome(false);
+        onHome();
     }
     private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
     {

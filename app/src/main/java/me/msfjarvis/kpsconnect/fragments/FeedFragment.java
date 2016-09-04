@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.squareup.picasso.Picasso;
+
 import org.xdevs23.net.DownloadUtils;
 
 import java.io.InputStream;
@@ -67,33 +69,16 @@ public class FeedFragment extends Fragment {
                             FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]
                     )
             );
-        final Runnable setImageRunnable = new Runnable() {
-            @Override
-            public void run() {
-                cardImages[currentI].setImageBitmap(currentBitmap);
+        for (int i = 0; i < FeedFragmentStorage.getFeeds(FeedType.IMAGES).length; i++) {
+            try {
+                Picasso.with(currentContext).load(
+                        FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]).into(cardImages[i]);
+            } catch(Exception ex) {
+                ex.printStackTrace();
+                Log.d("KPSConnect", "Failed load of image " +
+                        FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]);
             }
-        };
-        Runnable loadImagesRunnable = new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < FeedFragmentStorage.getFeeds(FeedType.IMAGES).length; i++) {
-                    try {
-                        InputStream inputStream = DownloadUtils.getInputStreamForConnection(
-                                FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]
-                        );
-                        currentI = i;
-                        currentBitmap = BitmapFactory.decodeStream(inputStream);
-                        handler.post(setImageRunnable);
-                    } catch(Exception ex) {
-                        ex.printStackTrace();
-                        Log.d("KPSConnect", "Failed load of image " +
-                            FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]);
-                    }
-                }
-            }
-        };
-        Thread loadImagesThread = new Thread(loadImagesRunnable);
-        loadImagesThread.start();
+        }
         return finalView;
     }
 
