@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
         ht.commit();
+        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
     }
     public void onSotd(){
         drawerLayout.closeDrawers();
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
-        if (currentFeedFragmentInstance==null){loadFeeds(FEED_URL,true);}
+        onHome();
     }
 
     @Override
