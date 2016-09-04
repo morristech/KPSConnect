@@ -58,7 +58,9 @@ public class FeedFragment extends Fragment {
                             "#fefefe",
                             FeedFragmentStorage.getFeeds(FeedType.TITLES)[i], 18, "#010101",
                             FeedFragmentStorage.getFeeds(FeedType.CATEGORIES)[i], 14, "#808080",
-                            FeedFragmentStorage.getFeeds(FeedType.LINKS)[i], cardImages[i]
+                            FeedFragmentStorage.getFeeds(FeedType.LINKS)[i], cardImages[i],
+                            FeedFragmentStorage.getFeeds(FeedType.CONTENT)[i],
+                            FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]
                     )
             );
         final Runnable setImageRunnable = new Runnable() {

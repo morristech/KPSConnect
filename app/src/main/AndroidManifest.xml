@@ -45,6 +45,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <receiver
             android:name=".recievers.PushReceiver"
             android:exported="false">
@@ -68,7 +69,10 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service android:name="me.pushy.sdk.services.PushySocketService" />
-     </application>
+
+        <activity android:name=".activities.FeedActivity"></activity>
+    </application>
 
 </manifest>

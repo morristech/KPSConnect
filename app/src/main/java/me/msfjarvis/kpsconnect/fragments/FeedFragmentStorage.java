@@ -11,7 +11,8 @@ public class FeedFragmentStorage {
                     TITLES      = 0,
                     CATEGORIES  = 1,
                     LINKS       = 2,
-                    IMAGES      = 3
+                    IMAGES      = 3,
+                    CONTENT     = 4
                             ;
     }
 

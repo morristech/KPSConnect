@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
@@ -92,9 +93,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
     }
 
-    public void onHome() {
+    public void onHome(boolean showDialog) {
         drawerLayout.closeDrawers();
-        loadFeeds(FEED_URL);
+        loadFeeds(FEED_URL,showDialog);
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
@@ -133,11 +134,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
     //load feeds
-    private void loadFeeds(String url) {
+    private void loadFeeds(String url, boolean showDialog) {
         String[] urlArr = {url};
 
         new RssReader(MainActivity.this)
-                .showDialog(true)
+                .showDialog(showDialog)
                 .urls(urlArr)
                 .parse(this);
     }
@@ -148,16 +149,19 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final ArrayList<String> rssCategories = new ArrayList<>();
         final ArrayList<String> rssLinks = new ArrayList<>();
         final ArrayList<String> rssImages = new ArrayList<>();
+        final ArrayList<String> rssContents = new ArrayList<>();
         for (RssItem rssItem : rssItems) {
             rssTitles.add(rssItem.getTitle());
             rssCategories.add(rssItem.getCategory());
             rssLinks.add(rssItem.getLink());
             rssImages.add(rssItem.getImageUrl());
+            rssContents.add(rssItem.getDescription());
         }
         currentFeedFragmentInstance = FeedFragment.createInstance(
                 getApplicationContext(),
-                rssTitles, rssCategories, rssLinks, rssImages
+                rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
+        if (currentFeedFragmentInstance==null){loadFeeds(FEED_URL,true);}
     }
 
     @Override
@@ -172,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         assert navigationView != null;
         selected = "home";
         navigationView.setCheckedItem(R.id.home);
-        onHome();
+        loadFeeds(FEED_URL,false);
+        onHome(true);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -181,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
                 switch (id){
                     case R.id.home:
-                        onHome();
+                        onHome(false);
                         selected = "home";
                         break;
                     case R.id.app_feedback:
@@ -222,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
+        onHome(false);
 
     }
     private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>

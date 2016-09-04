@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import me.msfjarvis.kpsconnect.activities.FeedActivity;
+
 public class CreateCard extends Activity {
 
     public static int dpToPx(Context context, float dpValue) {
@@ -25,9 +27,10 @@ public class CreateCard extends Activity {
     public static CardView newCard(final Context mContext, final Activity activity,
                                    int mRadius, int mPadding,
                                    int mMaxElevation, int mElevation, String mBackgroundColor,
-                                   String mTitle, int mTitleSize, String mTitleColor,
-                                   String mCategory, int mCatSize, String mCatColor,
-                                   final String onClickURL, ImageView imageView) {
+                                   final String mTitle, int mTitleSize, String mTitleColor,
+                                   final String mCategory, int mCatSize, String mCatColor,
+                                   final String onClickURL, ImageView imageView,
+                                   final String mContent, final String mImageURL) {
         CardView card = new CardView(mContext);
         RelativeLayout inner = new RelativeLayout(mContext);
         LinearLayout.LayoutParams innerParams = new LinearLayout.LayoutParams(
@@ -85,14 +88,32 @@ public class CreateCard extends Activity {
         tvc.setTextColor(Color.parseColor(mCatColor));
         inner.addView(tvc);
         card.addView(inner);
+        card.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, onClickURL);
+                try {
+                    activity.startActivity(Intent.createChooser(shareIntent, "Share link using"));
+                }catch(Exception exc){
+                    Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+        });
         card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(onClickURL));
-                try {
+                Intent intent = new Intent(mContext, FeedActivity.class);
+                intent.putExtra("title",mTitle);
+                intent.putExtra("category",mCategory);
+                intent.putExtra("content",mContent);
+                intent.putExtra("featuredImage",mImageURL);
+                try{
                     activity.startActivity(intent);
-                } catch (ActivityNotFoundException exc) {
-                    Toast.makeText(view.getContext(), exc.toString(), Toast.LENGTH_LONG).show();
+                }catch(Exception exc){
+                    Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
                 }
             }
         });
