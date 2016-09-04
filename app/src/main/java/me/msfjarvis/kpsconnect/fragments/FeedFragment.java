@@ -15,10 +15,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+
 import org.xdevs23.net.DownloadUtils;
+
 import java.io.InputStream;
 import java.util.ArrayList;
+
 import me.msfjarvis.kpsconnect.utils.CreateCard;
+
 import static me.msfjarvis.kpsconnect.fragments.FeedFragmentStorage.FeedType;
 import static me.msfjarvis.kpsconnect.utils.CreateCard.dpToPx;
 

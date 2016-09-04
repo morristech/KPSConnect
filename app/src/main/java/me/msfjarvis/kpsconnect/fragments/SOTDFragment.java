@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import com.squareup.picasso.Picasso;
 
 import static me.msfjarvis.kpsconnect.utils.CreateCard.dpToPx;

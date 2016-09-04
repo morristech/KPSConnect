@@ -1,8 +1,8 @@
 package me.msfjarvis.kpsconnect.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
 import android.widget.ImageView;
@@ -10,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-
-import org.jsoup.examples.HtmlToPlainText;
 
 import me.msfjarvis.kpsconnect.R;
 

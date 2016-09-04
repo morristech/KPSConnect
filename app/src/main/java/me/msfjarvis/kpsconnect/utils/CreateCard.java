@@ -1,11 +1,9 @@
 package me.msfjarvis.kpsconnect.utils;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;

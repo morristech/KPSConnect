@@ -28,6 +28,11 @@ signingConfigs
             minifyEnabled false
             shrinkResources true
         }
+        debug {
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
+        }
     }
     lintOptions {
         abortOnError false // Ignore translation stuff and annoying warnings

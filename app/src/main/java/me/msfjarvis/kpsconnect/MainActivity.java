@@ -39,7 +39,6 @@ import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
-
 import me.pushy.sdk.Pushy;
 import me.pushy.sdk.exceptions.PushyException;
 
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
+            Log.d("KPSConnect", "Internet is connected!");
             new RegisterForPushNotificationsAsync().execute();
             SharedPreferences pref =
                     PreferenceManager.getDefaultSharedPreferences(this);
@@ -102,12 +102,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onHome(boolean showDialog) {
         if(isPaused) return;
+        Log.d("KPSConnect", "Called home!");
         drawerLayout.closeDrawers();
-        loadFeeds(FEED_URL,showDialog);
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
         ht.commit();
+        Log.d("KPSConnect", "Is the current feed fragment instance null? " +
+                (currentFeedFragmentInstance == null));
         if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL, false);
     }
     public void onSotd() {
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     //load feeds
     private void loadFeeds(String url, boolean showDialog) {
         if(areFeedsLoading) return;
+        Log.d("KPSConnect", "Loading feeds...");
         areFeedsLoading = true;
         String[] urlArr = {url};
 
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     @Override
     public void onSuccess(List<RssItem> rssItems) {
         if(isPaused) return;
+        Log.d("KPSConnect", "Feeds loaded.");
         final ArrayList<String> rssTitles = new ArrayList<>();
         final ArrayList<String> rssCategories = new ArrayList<>();
         final ArrayList<String> rssLinks = new ArrayList<>();
@@ -178,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
         areFeedsLoading = false;
+        Log.d("KPSConnect", "Calling home!");
         onHome(false);
     }
 
@@ -193,16 +198,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         assert navigationView != null;
         selected = "home";
         navigationView.setCheckedItem(R.id.home);
-        loadFeeds(FEED_URL,true);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-                int id = menuItem.getItemId();
-
-                switch (id){
+                switch (menuItem.getItemId()){
                     case R.id.home:
-                        loadFeeds(FEED_URL,false);
+                        onHome(false);
                         selected = "home";
                         break;
                     case R.id.app_feedback:
@@ -223,7 +224,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         break;
                     case R.id.logout:
                         finish();
-
+                        break;
+                    default:
+                        break;
                 }
                 return true;
             }
@@ -243,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
+        onHome(false);
     }
     private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
     {
@@ -273,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onResume(){
         super.onResume();
+        isPaused = false;
         switch (selected){
             case "home":
                 navigationView.setCheckedItem(R.id.home);
