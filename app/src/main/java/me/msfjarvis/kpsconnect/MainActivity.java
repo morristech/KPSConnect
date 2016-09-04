@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +27,8 @@ import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+
+import org.xdevs23.ui.utils.BarColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,13 +50,15 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public static final String BASE_URL = "http://api.msfjarvis.me:2015/regids/register";
     public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
     public String result;
-    private FeedFragment currentFeedFragmentInstance;
+    public FeedFragment currentFeedFragmentInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
+        BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
+        BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -93,15 +96,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
     }
 
-    public void onHome(boolean showDialog) {
-        drawerLayout.closeDrawers();
-        loadFeeds(FEED_URL,showDialog);
-        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
-                :  currentFeedFragmentInstance));
-        ht.commit();
-        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
-    }
     public void onSotd(){
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
@@ -162,7 +156,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
-        onHome();
+        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
+        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
+                :  currentFeedFragmentInstance));
+        ht.commit();
+        if(currentFeedFragmentInstance == null){loadFeeds(FEED_URL,true);}
     }
 
     @Override
@@ -177,8 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         assert navigationView != null;
         selected = "home";
         navigationView.setCheckedItem(R.id.home);
-        loadFeeds(FEED_URL,false);
-        onHome(true);
+        loadFeeds(FEED_URL,true);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -187,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
                 switch (id){
                     case R.id.home:
-                        onHome(false);
+                        loadFeeds(FEED_URL,false);
                         selected = "home";
                         break;
                     case R.id.app_feedback:
@@ -228,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-        onHome(false);
 
     }
     private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
