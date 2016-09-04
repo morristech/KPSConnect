@@ -251,12 +251,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             }
             return result;
         }
-
-        @Override
-        protected void onPostExecute(String result)
-        {
-            Log.d("KPSConnect",result);
-        }
     }
     public void onResume(){
         super.onResume();
