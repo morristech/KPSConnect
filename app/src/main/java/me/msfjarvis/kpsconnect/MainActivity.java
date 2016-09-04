@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.afollestad.bridge.Bridge;
 import com.afollestad.bridge.BridgeException;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
@@ -50,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
     public String result;
     public FeedFragment currentFeedFragmentInstance;
-
+    private int numberOfLaunchesBeforePrompt = 5;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +74,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         if (isConnected) {
             Log.d("KPSConnect", "Internet is connected!");
             new RegisterForPushNotificationsAsync().execute();
-            SharedPreferences pref =
-                    PreferenceManager.getDefaultSharedPreferences(this);
+            pref = PreferenceManager.getDefaultSharedPreferences(this);
+            edit = pref.edit();
             String is_first_run = pref.getString("is_first_run","n/a");
             if (is_first_run.equals("n/a")) {
-                SharedPreferences.Editor edit = pref.edit();
                 edit.putString("is_first_run", "one");
                 edit.apply();
                 Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
@@ -84,6 +87,40 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             setSupportActionBar(toolbar);
             toolbar.inflateMenu(R.menu.menu_main);
             initNavigationDrawer();
+            final int runs = pref.getInt("runs",0);
+            if (runs+1 == numberOfLaunchesBeforePrompt | pref.getString("rating_done","n/a").equals("n/a")){
+                new MaterialDialog.Builder(this)
+                        .title("Rate the app!")
+                        .content("If you're liking KPS Connect, rate us on the Play Store!")
+                        .positiveText("Sure!")
+                        .neutralText("Later")
+                        .negativeText("No")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse("market://details?id=" + context.getPackageName()));
+                                if (intent.resolveActivity(getPackageManager()) != null) {
+                                    startActivity(intent);
+                                    edit.putString("rating_done","yes");
+                                }
+                            }
+                        })
+                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                edit.putInt("runs",runs-1);
+                            }
+                        })
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                edit.putInt("runs",0);
+                            }
+                        })
+                        .build();
+
+            }
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
