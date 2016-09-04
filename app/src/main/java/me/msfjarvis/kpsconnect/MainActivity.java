@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         if(isPaused) return;
         drawerLayout.closeDrawers();
         LibsSupportFragment fragment = new LibsBuilder()
+                .withAboutIconShown(true)
+                .withAboutVersionShown(true)
+                .withAboutDescription("These are the libararies used to make the app." +
+                        "Each guy did a fab job!")
                 .supportFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment);
