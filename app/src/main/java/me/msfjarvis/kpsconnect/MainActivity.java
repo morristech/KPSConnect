@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public String result;
     public FeedFragment currentFeedFragmentInstance;
 
+    private boolean isPaused = false;
+    private boolean areFeedsLoading = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,20 +99,34 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
     }
 
-    public void onSotd(){
+
+    public void onHome(boolean showDialog) {
+        if(isPaused) return;
+        drawerLayout.closeDrawers();
+        loadFeeds(FEED_URL,showDialog);
+        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
+        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
+                :  currentFeedFragmentInstance));
+        ht.commit();
+        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL, false);
+    }
+    public void onSotd() {
+        if(isPaused) return;
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new SOTDFragment());
         ht.commit();
     }
-    public void onEotd(){
+    public void onEotd() {
+        if(isPaused) return;
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new EOTDFragment());
         ht.commit();
     }
 
-    public void onFeedback(){
+    public void onFeedback() {
+        if(isPaused) return;
         drawerLayout.closeDrawers();
         Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
         try {
@@ -119,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             Toast.makeText(MainActivity.this, R.string.oops, Toast.LENGTH_SHORT).show();
         }
     }
-    public void onAbout(){
+    public void onAbout() {
+        if(isPaused) return;
         drawerLayout.closeDrawers();
         LibsSupportFragment fragment = new LibsBuilder()
                 .supportFragment();
@@ -130,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     //load feeds
     private void loadFeeds(String url, boolean showDialog) {
+        if(areFeedsLoading) return;
+        areFeedsLoading = true;
         String[] urlArr = {url};
 
         new RssReader(MainActivity.this)
@@ -140,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     @Override
     public void onSuccess(List<RssItem> rssItems) {
+        if(isPaused) return;
         final ArrayList<String> rssTitles = new ArrayList<>();
         final ArrayList<String> rssCategories = new ArrayList<>();
         final ArrayList<String> rssLinks = new ArrayList<>();
@@ -156,11 +177,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 getApplicationContext(),
                 rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
-        FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
-                :  currentFeedFragmentInstance));
-        ht.commit();
-        if(currentFeedFragmentInstance == null){loadFeeds(FEED_URL,true);}
+        areFeedsLoading = false;
+        onHome(false);
     }
 
     @Override
@@ -252,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             return result;
         }
     }
+
     public void onResume(){
         super.onResume();
         switch (selected){
@@ -268,6 +287,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 navigationView.setCheckedItem(R.id.sotd);
                 break;
         }
+    }
+
+    @Override
+    public void onPause() {
+        isPaused = true;
+        super.onPause();
     }
 
 }
