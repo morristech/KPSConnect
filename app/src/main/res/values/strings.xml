@@ -19,8 +19,15 @@
     <string name="email">app@khaitanpublicschool.com</string>
     <string name="aboutLibraries_description_special1_text">
         <![CDATA[
+        <i>Version 4.3.0</i><br />
+        - Show loading dialog on start<br />
+        - Add animations to feed and feedback activities<br />
+        - Make registration ID info more clear<br />
+        <i>Version 4.2.0</i><br />
+        - Make Used Libraries section more useful
+        <br />
         <i>Version 4.1.0</i><br />
-        - Ready for public release
+        - Initial public release
         <br />
         <i>Version 4.0.0</i><br />
         - Massive improvements to feed<br />
