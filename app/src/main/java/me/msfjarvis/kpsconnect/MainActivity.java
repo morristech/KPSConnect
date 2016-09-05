@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .withAboutSpecial1("Changelog")
                 .withAboutSpecial1Description(getResources().getString(R.string.aboutLibraries_description_special1_text))
     		    .withAboutSpecial2("ID")
-    		    .withAboutSpecial2Description("<b>Notification registration ID</b><br /><br />"+pref.getString("regID","null")+"<br /><br />Send this if you feel you are not getting notifications")
+    		    .withAboutSpecial2Description("<b>Notification registration ID</b><br /><br />"+pref.getString("regID","null")+"<br /><br />Send this to us if you feel you are not getting notifications")
     		    .withAboutSpecial3("Team")
     		    .withAboutSpecial3Description("<ul>"+
 				"<li><b>Harsh Shandilya</b></li><br />"+
