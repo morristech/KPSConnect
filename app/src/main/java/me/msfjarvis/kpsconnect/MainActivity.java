@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         String[] urlArr = {url};
 
         new RssReader(MainActivity.this)
-                .showDialog(false)
+                .showDialog(true)
                 .urls(urlArr)
                 .parse(this);
     }
