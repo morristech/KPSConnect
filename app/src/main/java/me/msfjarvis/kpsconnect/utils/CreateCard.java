@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import me.msfjarvis.kpsconnect.R;
 import me.msfjarvis.kpsconnect.activities.FeedActivity;
 
 public class CreateCard extends Activity {
@@ -110,6 +111,7 @@ public class CreateCard extends Activity {
                 intent.putExtra("featuredImage",mImageURL);
                 try{
                     activity.startActivity(intent);
+                    activity.overridePendingTransition(R.anim.slide_up_info,R.anim.no_change);
                 }catch(Exception exc){
                     Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
                 }

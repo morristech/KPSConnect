@@ -73,7 +73,7 @@
 
         <service android:name="me.pushy.sdk.services.PushySocketService" />
 
-        <activity android:name=".activities.FeedActivity"></activity>
+        <activity android:name=".activities.FeedActivity" android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

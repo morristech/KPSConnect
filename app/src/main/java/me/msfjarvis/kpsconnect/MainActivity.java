@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
         try {
             startActivity(feedbackIntent);
+            overridePendingTransition(R.anim.slide_up_info,R.anim.no_change);
         }catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(MainActivity.this, R.string.oops, Toast.LENGTH_SHORT).show();
