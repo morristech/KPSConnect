@@ -17,4 +17,16 @@
     <string name="sotd">Student Of The Day</string>
     <string name="eotd">Event Of The Day</string>
     <string name="email">app@khaitanpublicschool.com</string>
+    <string name="aboutLibraries_description_special1_text">
+        <![CDATA[
+        <i>Version 4.1.0</i><br />
+        - Ready for public release
+        <br />
+        <i>Version 4.0.0</i><br />
+        - Massive improvements to feed<br />
+        <i>Version 3.0.0-beta</i><br />
+        - Last beta version<br />
+        ]]>
+    </string>
+
 </resources>

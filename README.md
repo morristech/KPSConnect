@@ -1,4 +1,4 @@
-# KPSConnect [![Build Status](https://travis-ci.com/MSF-Jarvis/KPSConnect.svg?token=dnVikpBRSKRrjegDxFgm&branch=master-new)](https://travis-ci.com/MSF-Jarvis/KPSConnect)
+# KPSConnect [![Build Status](https://travis-ci.org/MSF-Jarvis/KPSConnect.svg?branch=rework-master)](https://travis-ci.org/MSF-Jarvis/KPSConnect)
 
 ```
 Copyright 2016 Harsh "MSF Jarvis" Shandilya
