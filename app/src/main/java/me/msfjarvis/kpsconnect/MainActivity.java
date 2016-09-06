@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public String result;
     public String selected = "";
     public FeedFragment currentFeedFragmentInstance;
-    private int numberOfLaunchesBeforePrompt = 5;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
@@ -89,7 +88,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             toolbar.inflateMenu(R.menu.menu_main);
             initNavigationDrawer();
             final int runs = pref.getInt("runs",0);
-            if (runs+1 == numberOfLaunchesBeforePrompt | pref.getString("rating_done","n/a").equals("n/a")){
+            int numberOfLaunchesBeforePrompt = 5;
+            if (runs+1 == numberOfLaunchesBeforePrompt || pref.getString("rating_done","n/a").equals("n/a")){
                 new MaterialDialog.Builder(this)
                         .title("Rate the app!")
                         .content("If you're liking KPS Connect, rate us on the Play Store!")
@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         })
                         .build();
 
+            }else{
+                edit.putInt("runs",runs+1);
             }
         } else {
             new MaterialDialog.Builder(this)

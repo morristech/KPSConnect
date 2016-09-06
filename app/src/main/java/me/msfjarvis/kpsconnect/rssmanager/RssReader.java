@@ -44,7 +44,6 @@ public class RssReader implements OnFeedLoadListener {
         this.mUrlList = urlList;
         this.mSourceList = sourceList;
         this.mCategories = categories;
-        this.mCategoryImgIds = categoryImgIds;
         this.mOnRssLoadListener = onRssLoadListener;
     }
 
@@ -64,12 +63,6 @@ public class RssReader implements OnFeedLoadListener {
 
     public RssReader categories(String[] categories) {
         this.mCategories = categories;
-        return this;
-    }
-
-    @Deprecated
-    public RssReader categoryImgIds(int[] categoryImgIds) {
-        this.mCategoryImgIds = categoryImgIds;
         return this;
     }
 
