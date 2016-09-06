@@ -30,7 +30,6 @@ public class RssReader implements OnFeedLoadListener {
     private static String PUB_DATE = "pubDate";
     private static String URL = "url";
     private String[] mUrlList, mSourceList, mCategories;
-    private int[] mCategoryImgIds;
     private boolean mShowDialog = true;
     private Context mContext;
     private List<RssItem> mRssItems = new ArrayList<>();
@@ -93,7 +92,7 @@ public class RssReader implements OnFeedLoadListener {
         if (mUrlList != null) {
             parseRss(0);
         } else {
-            throw new NullPointerException("Url list cannot be empty");
+            throw new IllegalArgumentException("Url list cannot be empty");
         }
     }
 

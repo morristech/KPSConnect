@@ -1,12 +1,9 @@
 package me.msfjarvis.kpsconnect.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +15,6 @@ import android.widget.ScrollView;
 
 import com.squareup.picasso.Picasso;
 
-import org.xdevs23.net.DownloadUtils;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import me.msfjarvis.kpsconnect.utils.CreateCard;
@@ -32,10 +26,6 @@ public class FeedFragment extends Fragment {
 
     private static Context currentContext;
 
-    private int currentI = 0;
-    private Bitmap currentBitmap;
-    private Handler handler;
-
     @SafeVarargs
     public static FeedFragment createInstance(Context context, ArrayList<String>... feeds) {
         currentContext = context;
@@ -45,7 +35,6 @@ public class FeedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        handler = new Handler();
         ScrollView finalView = new ScrollView(currentContext);
         LinearLayout listView = new LinearLayout(currentContext);
         finalView.addView(listView);

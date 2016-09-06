@@ -18,7 +18,7 @@ if [ "$1" == "--clearPw" ]; then
   export KPSCONNECT_KEYSTORE_PASSWD=""
 fi
 
-KPSCONNECT_STOREPWD=""
+KPSCONNECT_KEYSTOREPWD=""
 KPSCONNECT_KEYPWD=""
 
 if [ "$1" == "--gpw" ]; then

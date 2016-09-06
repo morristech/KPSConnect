@@ -13,9 +13,9 @@ import android.util.Log;
 import me.msfjarvis.kpsconnect.R;
 
 public class PushReceiver extends BroadcastReceiver {
-    String notificationTitle = "KPS Connect";
-    String notificationText = "Test notification";
-    String urlToLoad = "https://khaitanpublicschool.com/blog";
+    private String notificationTitle = "KPS Connect";
+    private String notificationText = "Test notification";
+    private String urlToLoad = "https://khaitanpublicschool.com/blog";
 
     @Override
     public void onReceive(Context context, Intent intent) {

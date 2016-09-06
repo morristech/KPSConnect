@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public static final String BASE_URL = "http://api.msfjarvis.me:2015/regids/register";
     public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
     public String result;
+    public String selected = "";
     public FeedFragment currentFeedFragmentInstance;
     private int numberOfLaunchesBeforePrompt = 5;
     private boolean isPaused = false;
@@ -244,8 +245,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onFailure(String message) {
         Toast.makeText(MainActivity.this, "Error:\n" + message, Toast.LENGTH_SHORT).show();
     }
-
-    String selected = "";
+    
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
@@ -343,6 +343,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 break;
             case "sotd":
                 navigationView.setCheckedItem(R.id.sotd);
+                break;
+            default:
                 break;
         }
     }

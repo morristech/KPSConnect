@@ -37,7 +37,7 @@ public class MainIntroActivity extends IntroActivity {
                 if (contentView != null) {
                     Slide slide = getSlide(position);
 
-                    if (slide == permissionsSlide) {
+                    if (slide.equals(permissionsSlide)) {
                         Snackbar.make(contentView, "You need to grant the permission first!", Snackbar.LENGTH_LONG).show();
                     }
                 }

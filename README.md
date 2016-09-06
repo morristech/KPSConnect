@@ -1,4 +1,4 @@
-# KPSConnect [![Build Status](https://travis-ci.org/MSF-Jarvis/KPSConnect.svg?branch=rework-master)](https://travis-ci.org/MSF-Jarvis/KPSConnect)
+# KPSConnect [![Build Status](https://travis-ci.org/MSF-Jarvis/KPSConnect.svg?branch=rework-master)](https://travis-ci.org/MSF-Jarvis/KPSConnect) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5a80fd77f294a5f93da921c69699fd8)](https://www.codacy.com/app/msfjarvis/KPSConnect?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MSF-Jarvis/KPSConnect&amp;utm_campaign=Badge_Grade)
 
 ```
 Copyright 2016 Harsh "MSF Jarvis" Shandilya

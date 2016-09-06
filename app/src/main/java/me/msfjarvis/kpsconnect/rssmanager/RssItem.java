@@ -4,15 +4,15 @@ package me.msfjarvis.kpsconnect.rssmanager;
  * Created by Kartik_ch on 11/15/2015.
  */
 public class RssItem {
-    String title;
-    String description;
-    String link;
-    String sourceName;
-    String sourceUrl;
-    String sourceUrlShort;
-    String imageUrl;
-    String category;
-    String pubDate;
+    private String title;
+    private String description;
+    private String link;
+    private String sourceName;
+    private String sourceUrl;
+    private String sourceUrlShort;
+    private String imageUrl;
+    private String category;
+    private String pubDate;
 
     public String getTitle() {
         return title;
