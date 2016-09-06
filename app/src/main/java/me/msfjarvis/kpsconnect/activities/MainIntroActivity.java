@@ -22,14 +22,24 @@ public class MainIntroActivity extends IntroActivity {
                 .image(R.drawable.ic_launcher)
                 .background(R.color.colorPrimary)
                 .build());
+                
+        addSlide(new SimpleSlide.Builder()
+                .title("Usage")
+                .description("Tap on card to read the post, long press to share")
+                // TODO Add in necessary image
+                .image(R.drawable.ic_launcher)
+                .background(R.color.colorPrimary)
+                .build());
+                
         final SimpleSlide permissionsSlide = new SimpleSlide.Builder()
                 .title("Storage Permissions")
                 .description("The identifier token is stored on the device itself, hence we need storage permissions")
                 .background(R.color.colorPrimary)
                 .permissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE})
                 .build();
-
+                
         addSlide(permissionsSlide);
+        
         addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
             @Override
             public void onNavigationBlocked(int position, int direction) {
