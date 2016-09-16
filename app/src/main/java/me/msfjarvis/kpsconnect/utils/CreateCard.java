@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
@@ -101,22 +102,38 @@ public class CreateCard extends Activity {
                 return false;
             }
         });
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, FeedActivity.class);
-                intent.putExtra("title",mTitle);
-                intent.putExtra("category",mCategory);
-                intent.putExtra("content",mContent);
-                intent.putExtra("featuredImage",mImageURL);
-                try{
-                    activity.startActivity(intent);
-                    activity.overridePendingTransition(R.anim.slide_up_info,R.anim.no_change);
-                }catch(Exception exc){
-                    Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
+        //category specific hack
+        //I-Lead newsletter posts have no content
+        if (mCategory.equals("I-Lead")) {
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(onClickURL));
+                    try{
+                    	activity.startActivity(browserIntent);
+                    }catch (ActivityNotFoundException exc){
+                    	Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, FeedActivity.class);
+                    intent.putExtra("title",mTitle);
+                    intent.putExtra("category",mCategory);
+                    intent.putExtra("content",mContent);
+                    intent.putExtra("featuredImage",mImageURL);
+                    try{
+                        activity.startActivity(intent);
+                        activity.overridePendingTransition(R.anim.slide_up_info,R.anim.no_change);
+                    }catch(Exception exc){
+                        Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
         return card;
     }
 }
