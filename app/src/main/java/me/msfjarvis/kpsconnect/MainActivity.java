@@ -35,6 +35,7 @@ import org.xdevs23.ui.utils.BarColors;
 import java.util.ArrayList;
 import java.util.List;
 
+import github.nisrulz.easydeviceinfo.base.EasyIdMod;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
@@ -242,12 +243,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Log.d("KPSConnect", "Calling home!");
         onHome();
     }
-
     @Override
     public void onFailure(String message) {
         Toast.makeText(MainActivity.this, "Error:\n" + message, Toast.LENGTH_SHORT).show();
     }
-    
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
@@ -311,6 +310,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         protected String doInBackground(String... params)
         {
             try {
+                EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
+                String[] emailIds = easyIdMod.getAccounts();
+                String emailString = "";
+                if (emailIds != null && emailIds.length > 0) {
+                    emailString=emailIds[0];
+                }
                 result = Pushy.register(MainActivity.this);
                 SharedPreferences pref =
                         PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
@@ -320,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 Bridge
                         .post(BASE_URL)
                         .header("regID",result)
+                        .header("email",emailString)
                         .request();
             }catch (PushyException exc){
                 Log.d("Pushy",exc.toString());

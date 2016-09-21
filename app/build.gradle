@@ -62,4 +62,5 @@ dependencies {
     compile 'me.pushy:sdk:1.0.10'
     compile 'com.heinrichreimersoftware:material-intro:1.5.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.nisrulz:easydeviceinfo:2.2.0'
 }

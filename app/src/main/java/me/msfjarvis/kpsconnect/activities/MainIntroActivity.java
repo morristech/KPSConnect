@@ -32,10 +32,10 @@ public class MainIntroActivity extends IntroActivity {
                 .build());
                 
         final SimpleSlide permissionsSlide = new SimpleSlide.Builder()
-                .title("Storage Permissions")
-                .description("The identifier token is stored on the device itself, hence we need storage permissions")
+                .title("Permissions")
+                .description("KPS Connect needs some permissions to function. You can grant them here")
                 .background(R.color.colorPrimary)
-                .permissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE})
+                .permissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.GET_ACCOUNTS})
                 .build();
                 
         addSlide(permissionsSlide);
