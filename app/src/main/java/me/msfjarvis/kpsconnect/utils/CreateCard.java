@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.View;
@@ -108,12 +108,7 @@ public class CreateCard extends Activity {
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(onClickURL));
-                    try{
-                    	activity.startActivity(browserIntent);
-                    }catch (ActivityNotFoundException exc){
-                    	Toast.makeText(mContext,exc.toString(),Toast.LENGTH_LONG).show();
-                    }
+                    Snackbar.make(view,R.string.i_lead_category_hack_error_text,Snackbar.LENGTH_LONG).show();
                 }
             });
         }else{
