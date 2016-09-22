@@ -3,13 +3,14 @@ package me.msfjarvis.kpsconnect.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+
+import org.jsoup.Jsoup;
 
 import me.msfjarvis.kpsconnect.R;
 
@@ -44,7 +45,7 @@ public class FeedActivity extends AppCompatActivity {
             }
             titleTextView.setText(title);
             categoryTextView.setText(category);
-            contentTextView.setText(Html.fromHtml(content));
+            contentTextView.setText(Jsoup.parse(content).toString());
             Picasso.with(getApplicationContext()).load(featuredImage).into(featuredImageView);
         }
     }

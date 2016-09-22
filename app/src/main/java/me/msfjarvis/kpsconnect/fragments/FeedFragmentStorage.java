@@ -16,6 +16,7 @@ public class FeedFragmentStorage {
                             ;
     }
 
+    @SafeVarargs
     public static void setFeeds(ArrayList<String>... feeds) {
         feedLists = feeds;
     }
