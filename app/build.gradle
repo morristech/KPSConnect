@@ -34,8 +34,13 @@ signingConfigs
             shrinkResources false
         }
     }
-    lintOptions {
-        abortOnError false // Ignore translation stuff and annoying warnings
+    packagingOptions {
+        exclude "META-INF/LICENSE"
+        exclude "META-INF/NOTICE.txt"
+    }
+
+    dexOptions {
+        preDexLibraries true    // For the libs to work better
     }
 }
 
