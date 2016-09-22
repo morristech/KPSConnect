@@ -20,21 +20,21 @@ public class MainIntroActivity extends IntroActivity {
                 .title(R.string.slide_1_title)
                 .description(R.string.slide_1_description)
                 .image(R.drawable.ic_launcher)
-                .background(R.color.colorPrimary)
+                .background(R.color.white)
                 .build());
                 
         addSlide(new SimpleSlide.Builder()
-                .title("Usage")
-                .description("Tap on card to read the post, long press to share")
+                .title(R.string.usage_title)
+                .description(R.string.usage_desc)
                 // TODO Add in necessary image
                 .image(R.drawable.ic_launcher)
-                .background(R.color.colorPrimary)
+                .background(R.color.white)
                 .build());
                 
         final SimpleSlide permissionsSlide = new SimpleSlide.Builder()
-                .title("Permissions")
-                .description("KPS Connect needs some permissions to function. You can grant them here")
-                .background(R.color.colorPrimary)
+                .title(R.string.permissions_title)
+                .description(R.string.permissions_desc)
+                .background(R.color.white)
                 .permissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.GET_ACCOUNTS})
                 .build();
                 
@@ -48,7 +48,7 @@ public class MainIntroActivity extends IntroActivity {
                     Slide slide = getSlide(position);
 
                     if (slide.equals(permissionsSlide)) {
-                        Snackbar.make(contentView, "You need to grant the permission first!", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(contentView, R.string.permissions_grant_error_text, Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
