@@ -45,7 +45,7 @@ public class FeedActivity extends AppCompatActivity {
             }
             titleTextView.setText(title);
             categoryTextView.setText(category);
-            contentTextView.setText(Jsoup.parse(content).toString());
+            contentTextView.setText(Jsoup.parse(content).text());
             Picasso.with(getApplicationContext()).load(featuredImage).into(featuredImageView);
         }
     }
