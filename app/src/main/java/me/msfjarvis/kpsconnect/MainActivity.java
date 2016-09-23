@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.afollestad.bridge.Bridge;
 import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.fernandodev.easyratingdialog.library.EasyRatingDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
+    private EasyRatingDialog easyRatingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        easyRatingDialog = new EasyRatingDialog(this);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
@@ -285,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 result = Pushy.register(MainActivity.this);
                 edit.putString("regID",result);
                 edit.apply();
+                assert emailString != null;
                 Bridge
                         .post(BASE_URL)
                         .header("regID",result)
@@ -318,6 +322,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             default:
                 break;
         }
+        easyRatingDialog.showIfNeeded();
     }
 
     @Override
@@ -325,6 +330,13 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         isPaused = true;
         super.onPause();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        easyRatingDialog.onStart();
+    }
+
 
 }
 
