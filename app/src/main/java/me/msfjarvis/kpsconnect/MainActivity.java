@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
             Log.d("KPSConnect", "Internet is connected!");
-            new RegisterForPushNotificationsAsync().execute();
             pref = PreferenceManager.getDefaultSharedPreferences(this);
             edit = pref.edit();
             String is_first_run = pref.getString("is_first_run","n/a");
@@ -83,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
                 startActivity(introIntent);
+            }else if(is_first_run.equals("n/a")){
+                new RegisterForPushNotificationsAsync().execute();
             }
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -315,13 +316,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 String emailString = "";
                 if (emailIds != null && emailIds.length > 0) {
                     emailString=emailIds[0];
+                    if (!(emailString == null)){
+                        edit.putString("email",emailString);
+                        edit.apply();
+                    }
                 }
                 result = Pushy.register(MainActivity.this);
-                SharedPreferences pref =
-                        PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("regID",result);
-                editor.apply();
+                edit.putString("regID",result);
+                edit.apply();
                 Bridge
                         .post(BASE_URL)
                         .header("regID",result)
