@@ -20,23 +20,29 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
         app:title="@string/title_activity_feedback" />
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/subject"
-        android:layout_width="300dp"
+    <android.support.design.widget.TextInputLayout
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:hint="@string/title"
-        app:met_floatingLabel="normal" />
+        android:layout_width="wrap_content">
+        <EditText
+            android:id="@+id/subject"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:hint="@string/title" />
+    </android.support.design.widget.TextInputLayout>
 
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/message"
-        android:layout_width="300dp"
+    <android.support.design.widget.TextInputLayout
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:hint="@string/message"
-        app:met_floatingLabel="normal" />
+        android:layout_width="wrap_content">
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:hint="@string/message" />
+    </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
