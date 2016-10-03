@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 Bridge
                         .post(BASE_URL)
                         .header("regID",result)
-                        .header("email",emailString)
+                        .header("email", emailString != null ? emailString : null)
                         .request();
             }catch (PushyException exc){
                 Log.d("Pushy",exc.toString());
