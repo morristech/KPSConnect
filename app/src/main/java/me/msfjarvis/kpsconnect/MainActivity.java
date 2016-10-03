@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import github.nisrulz.easydeviceinfo.base.EasyIdMod;
+import me.msfjarvis.kpsconnect.activities.MainIntroActivity;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
+    public static final String PREF_FIRST_RUN_KEY = "is_first_run";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,14 +75,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         if (isConnected) {
             Log.d("KPSConnect", "Internet is connected!");
             pref = PreferenceManager.getDefaultSharedPreferences(this);
-            edit = pref.edit();
-            String is_first_run = pref.getString("is_first_run","n/a");
-            if (is_first_run.equals("n/a")) {
-                edit.putString("is_first_run", "one");
-                edit.apply();
-                Intent introIntent = new Intent("me.msfjarvis.kpsconnect.MAININTROACTIVITY");
+            String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
+            if (is_first_run.equals("yes")) {
+                pref.edit().putString(PREF_FIRST_RUN_KEY,"no").apply();
+                Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-            }else if(is_first_run.equals("n/a")){
+            }else {
                 new RegisterForPushNotificationsAsync().execute();
             }
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                     .show();
         }
     }
-
 
     public void onHome() {
         if(isPaused) return;

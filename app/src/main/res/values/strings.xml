@@ -38,8 +38,10 @@
     <string name="i_lead_category_hack_error_text">I-Lead posts have no content :(</string>
     <string name="usage_title">Usage</string>
     <string name="usage_desc">Tap on a card to read the post, long press to share</string>
-    <string name="permissions_title">Permissions</string>
-    <string name="permissions_desc">KPS Connect needs some permissions to function. You can grant them here</string>
+    <string name="permissions_storage_title">Storage Permissions</string>
+    <string name="permissions_storage_desc">To send you notifications, we need to store a small ID token on your device and that needs storage permissions. Grant them here!</string>
+    <string name="permissions_contact_title">Contact Permissions</string>
+    <string name="permissions_contact_desc">We use your email ID to send personalised notifications whenever needed, that needs contact permissions. We do NOT read your contacts EVER.</string>
     <string name="permissions_grant_error_text">You need to grant the permission first!</string>
 
 </resources>
