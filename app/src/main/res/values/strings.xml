@@ -19,6 +19,11 @@
     <string name="email">app@khaitanpublicschool.com</string>
     <string name="aboutLibraries_description_special1_text">
         <![CDATA[
+        <i>Version 4.5.0</i><br />
+        - Split up permissions slides
+        - Log user's email IDs for personalised notifications
+        - Fix a couple of major bugs
+        - Cleanup code
         <i>Version 4.3.0</i><br />
         - Show loading dialog on start<br />
         - Add animations to feed and feedback activities<br />
