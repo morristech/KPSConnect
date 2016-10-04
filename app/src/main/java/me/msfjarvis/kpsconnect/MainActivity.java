@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-                recreate();
             }else {
                 new RegisterForPushNotificationsAsync().execute();
             }
@@ -108,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                     })
                     .show();
         }
+        onHome();
     }
 
     @SuppressLint("StringFormatMatches")
@@ -171,6 +171,36 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .parse(this);
     }
 
+    @Override
+    public void onSuccess(List<RssItem> rssItems) {
+        if(isPaused) return;
+        Log.d(getString(R.string.log_tag), getString(R.string.log_feeds_loaded));
+        final ArrayList<String> rssTitles = new ArrayList<>();
+        final ArrayList<String> rssCategories = new ArrayList<>();
+        final ArrayList<String> rssLinks = new ArrayList<>();
+        final ArrayList<String> rssImages = new ArrayList<>();
+        final ArrayList<String> rssContents = new ArrayList<>();
+        for (RssItem rssItem : rssItems) {
+            rssTitles.add(rssItem.getTitle());
+            rssCategories.add(rssItem.getCategory());
+            rssLinks.add(rssItem.getLink());
+            rssImages.add(rssItem.getImageUrl());
+            rssContents.add(rssItem.getDescription());
+        }
+        currentFeedFragmentInstance = FeedFragment.createInstance(
+                getApplicationContext(),
+                rssTitles, rssCategories, rssLinks, rssImages, rssContents
+        );
+        areFeedsLoading = false;
+        Log.d(getString(R.string.log_tag), getString(R.string.log_calling_home));
+        onHome();
+    }
+
+    @Override
+    public void onFailure(String message) {
+        Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
+    }
+
     private void ContactMe() {
         String[] TO = {getString(R.string.email_msfjarvis)};
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -203,35 +233,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         }
                     }).show();
         }
-    }
-
-    @Override
-    public void onSuccess(List<RssItem> rssItems) {
-        if(isPaused) return;
-        Log.d(getString(R.string.log_tag), getString(R.string.log_feeds_loaded));
-        final ArrayList<String> rssTitles = new ArrayList<>();
-        final ArrayList<String> rssCategories = new ArrayList<>();
-        final ArrayList<String> rssLinks = new ArrayList<>();
-        final ArrayList<String> rssImages = new ArrayList<>();
-        final ArrayList<String> rssContents = new ArrayList<>();
-        for (RssItem rssItem : rssItems) {
-            rssTitles.add(rssItem.getTitle());
-            rssCategories.add(rssItem.getCategory());
-            rssLinks.add(rssItem.getLink());
-            rssImages.add(rssItem.getImageUrl());
-            rssContents.add(rssItem.getDescription());
-        }
-        currentFeedFragmentInstance = FeedFragment.createInstance(
-                getApplicationContext(),
-                rssTitles, rssCategories, rssLinks, rssImages, rssContents
-        );
-        areFeedsLoading = false;
-        Log.d(getString(R.string.log_tag), getString(R.string.log_calling_home));
-        onHome();
-    }
-    @Override
-    public void onFailure(String message) {
-        Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
