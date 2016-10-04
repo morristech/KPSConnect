@@ -1,7 +1,6 @@
 package me.msfjarvis.kpsconnect.activities;
 
 import android.Manifest;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -29,7 +28,6 @@ public class MainIntroActivity extends IntroActivity {
         addSlide(new SimpleSlide.Builder()
                 .title(R.string.usage_title)
                 .description(R.string.usage_desc)
-                // TODO Add in necessary image
                 .image(R.drawable.ic_hint)
                 .background(R.color.white)
                 .build());

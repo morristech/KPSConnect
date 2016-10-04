@@ -29,7 +29,7 @@ public class FeedActivity extends AppCompatActivity {
             categoryTextView = (TextView) findViewById(R.id.feedCategoryView);
             contentTextView = (TextView) findViewById(R.id.feedContentView);
         }catch(NullPointerException exc){
-            Log.d("FeedView",exc.toString());
+            Log.d(getString(R.string.log_tag_feedview),exc.toString());
             Toast.makeText(getApplicationContext(),exc.toString(),Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -41,7 +41,7 @@ public class FeedActivity extends AppCompatActivity {
                 content = feedIntent.getStringExtra("content");
                 featuredImage = feedIntent.getStringExtra("featuredImage");
             }catch (NullPointerException exc) {
-                Log.d("FeedActivty", exc.toString());
+                Log.d(getString(R.string.log_tag_feedactivity), exc.toString());
             }
             titleTextView.setText(title);
             categoryTextView.setText(category);

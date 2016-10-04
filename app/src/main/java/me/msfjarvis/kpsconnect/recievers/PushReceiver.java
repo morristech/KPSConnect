@@ -6,16 +6,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import me.msfjarvis.kpsconnect.R;
 
 public class PushReceiver extends BroadcastReceiver {
     private String notificationTitle = "KPS Connect";
     private String notificationText = "Test notification";
-    private String urlToLoad = "https://khaitanpublicschool.com/blog";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,11 +23,7 @@ public class PushReceiver extends BroadcastReceiver {
         if (intent.getStringExtra("title") != null){
             notificationTitle = intent.getStringExtra("title");
         }
-        if (intent.getStringExtra("url") != null){
-            urlToLoad = intent.getStringExtra("url");
-            Log.d("TAG",urlToLoad);
-        }
-        Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlToLoad));
+        Intent myIntent = new Intent("me.msfjarvis.kpsconnect.MainActivity");
         int requestID = (int) System.currentTimeMillis();
         int flags = PendingIntent.FLAG_CANCEL_CURRENT;
         PendingIntent pIntent = PendingIntent.getActivity(context, requestID, myIntent, flags);

@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import static me.msfjarvis.kpsconnect.utils.CreateCard.dpToPx;
 
 public class SOTDFragment extends Fragment {
-    public String IMAGE_URL="http://kpsconnect.msfjarvis.me:2015/sotd/image.jpeg";
+    public String IMAGE_URL="https://kpsconnect.msfjarvis.me/sotd/image.jpeg";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

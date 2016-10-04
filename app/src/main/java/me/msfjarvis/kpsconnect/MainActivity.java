@@ -1,5 +1,6 @@
 package me.msfjarvis.kpsconnect;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.afollestad.bridge.Bridge;
 import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
@@ -59,13 +61,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
+    public static final String PREF_EMAIL_KEY = "email";
+    public static final String PREF_REGID_KEY = "regID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
-        loadFeeds(FEED_URL);
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
+                recreate();
             }else {
                 new RegisterForPushNotificationsAsync().execute();
             }
@@ -95,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
                     .content(R.string.not_connected)
-                    .positiveText("OK")
+                    .positiveText(R.string.positive_text)
                     .dismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
@@ -106,16 +110,16 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     public void onHome() {
         if(isPaused) return;
-        Log.d("KPSConnect", "Called home!");
+        Log.d(getString(R.string.log_tag), getString(R.string.log_called_home));
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
         ht.commit();
-        Log.d("KPSConnect", "Is the current feed fragment instance null? " +
-                (currentFeedFragmentInstance == null));
+        Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
         if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
     }
     public void onSotd() {
@@ -133,18 +137,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         ht.commit();
     }
 
-    public void onFeedback() {
-        if(isPaused) return;
-        drawerLayout.closeDrawers();
-        Intent feedbackIntent = new Intent("me.msfjarvis.kpsconnect.FEEDBACKACTIVITY");
-        try {
-            startActivity(feedbackIntent);
-            overridePendingTransition(R.anim.slide_up_info,R.anim.no_change);
-        }catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(MainActivity.this, R.string.oops, Toast.LENGTH_SHORT).show();
-        }
-    }
     public void onAbout() {
         if(isPaused) return;
         drawerLayout.closeDrawers();
@@ -152,24 +144,19 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         		.withAboutAppName("KPS Connect")
                 .withAboutIconShown(true)
                 .withAboutVersionShown(true)
-                .withAboutDescription("These are the libraries used to make the app." +
-                        "Each guy did a fab job!")
-                .withAboutSpecial1("Changelog")
-                .withAboutSpecial1Description(getResources().getString(R.string.aboutLibraries_description_special1_text))
-    		    .withAboutSpecial2("ID")
-    		    .withAboutSpecial2Description("<b>Notification registration ID</b><br /><br />"+pref.getString("regID","null")+"<br /><br />Send this to us if you feel you are not getting notifications")
-    		    .withAboutSpecial3("Team")
-    		    .withAboutSpecial3Description("<ul>"+
-				"<li><b>Harsh Shandilya</b></li><br />"+
-				"<li><b>Arjun Roy</b></li><br />"+
-				"<li><b>Amit Kumar</b></li><br />"+
-				"<li><b>Manika Pal</b></i><br />"+
-				"</ul><br /><i>Special thanks to Ayush Kaushik</i>")
+                .withAboutDescription(getString(R.string.about_kpsconnect_desc))
+                .withAboutSpecial1(getString(R.string.changelog_title))
+                .withAboutSpecial1Description(getString(R.string.aboutLibraries_description_special1_text))
+    		    .withAboutSpecial2(getString(R.string.about_title_id))
+    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "null")))
+    		    .withAboutSpecial3(getString(R.string.about_kpsconnect_team_title))
+    		    .withAboutSpecial3Description(getString(R.string.about_kpsconnect_team_desc))
                 .supportFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment);
         ft.commit();
     }
+
 
     //load feeds
     private void loadFeeds(String url) {
@@ -184,10 +171,44 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .parse(this);
     }
 
+    private void ContactMe() {
+        String[] TO = {getString(R.string.email_msfjarvis)};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(android.net.Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_about_kps_connect));
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_app)));
+        } catch (android.content.ActivityNotFoundException ex) {
+            new BottomDialog.Builder(this)
+                    .setTitle(getString(R.string.no_email_app_found_title))
+                    .setContent(getString(R.string.no_email_app_found_message))
+                    .setPositiveText(getString(R.string.download_gmail))
+                    .setNegativeText(getString(R.string.ok))
+                    .setCancelable(false)
+                    .onPositive(new BottomDialog.ButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull BottomDialog dialog) {
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(android.net.Uri.parse(getResources().getString(R.string.gmail_link)));
+                            startActivity(i);
+                        }
+                    })
+                    .onNegative(new BottomDialog.ButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull BottomDialog dialog) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+    }
+
     @Override
     public void onSuccess(List<RssItem> rssItems) {
         if(isPaused) return;
-        Log.d("KPSConnect", "Feeds loaded.");
+        Log.d(getString(R.string.log_tag), getString(R.string.log_feeds_loaded));
         final ArrayList<String> rssTitles = new ArrayList<>();
         final ArrayList<String> rssCategories = new ArrayList<>();
         final ArrayList<String> rssLinks = new ArrayList<>();
@@ -205,12 +226,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 rssTitles, rssCategories, rssLinks, rssImages, rssContents
         );
         areFeedsLoading = false;
-        Log.d("KPSConnect", "Calling home!");
+        Log.d(getString(R.string.log_tag), getString(R.string.log_calling_home));
         onHome();
     }
     @Override
     public void onFailure(String message) {
-        Toast.makeText(MainActivity.this, "Error:\n" + message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
@@ -227,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         selected = "home";
                         break;
                     case R.id.app_feedback:
-                        onFeedback();
+                        ContactMe();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
@@ -281,12 +302,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 if (emailIds != null && emailIds.length > 0) {
                     emailString=emailIds[0];
                     if (!(emailString == null)){
-                        edit.putString("email",emailString);
+                        edit.putString(PREF_EMAIL_KEY,emailString);
                         edit.apply();
                     }
                 }
                 result = Pushy.register(MainActivity.this);
-                edit.putString("regID",result);
+                edit.putString(PREF_REGID_KEY,result);
                 edit.apply();
                 Bridge
                         .post(BASE_URL)
@@ -294,12 +315,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         .header("email", emailString != null ? emailString : "null")
                         .request();
             }catch (PushyException exc){
-                Log.d("Pushy",Arrays.toString(exc.getStackTrace()));
+                Log.d(getString(R.string.log_tag_pushy),Arrays.toString(exc.getStackTrace()));
             }catch (BridgeException exc){
-                Log.d("Bridge",Arrays.toString(exc.getStackTrace()));
+                Log.d(getString(R.string.log_tag_bridge),Arrays.toString(exc.getStackTrace()));
             }
             catch (NullPointerException exc){
-                Log.d("NPE", Arrays.toString(exc.getStackTrace()));
+                Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
             }
             return result;
         }
