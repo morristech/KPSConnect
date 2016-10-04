@@ -74,5 +74,14 @@
     <string name="log_tag_npe">NPE</string>
     <string name="log_tag_feedactivity">FeedActivty</string>
     <string name="log_tag_feedview">FeedView</string>
+    <string name="log_tag_internet_connected">Internet is connected!</string>
+    <string name="demo_shiz_nav_drawer">Use the NavigationDrawer to access the stuff of the app</string>
+    <string name="demo_shiz_home">You get your news from here</string>
+    <string name="demo_shiz_feedback">Send feedback from here</string>
+    <string name="demo_shiz_sotd">The Student of the Day gets a mention here!</string>
+    <string name="demo_shiz_eotd">Aaand the EVENT of the day shows up here</string>
+    <string name="demo_shiz_about_kpsconnect">Know a bit more about the app here!</string>
+    <string name="demo_shiz_success">Thanks for finishing the tutorial!</string>
+    <string name="demo_shiz_fail">BOO! You didn\'t complete the tutorial!</string>
 
 </resources>

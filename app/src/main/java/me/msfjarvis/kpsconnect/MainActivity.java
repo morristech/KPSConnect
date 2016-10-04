@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.afollestad.bridge.Bridge;
 import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            Log.d("KPSConnect", "Internet is connected!");
+            Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
             pref = PreferenceManager.getDefaultSharedPreferences(this);
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
             if (is_first_run.equals("yes")) {
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
+                DemoTheShiz();
             }else {
                 new RegisterForPushNotificationsAsync().execute();
             }
@@ -234,6 +237,32 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                     }).show();
         }
     }
+
+    public void DemoTheShiz() {
+        new TapTargetSequence(this)
+                .targets(
+                        TapTarget.forView(findViewById(R.id.navigation_view), getString(R.string.demo_shiz_nav_drawer)),
+                        TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
+                        TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)),
+                        TapTarget.forView(findViewById(R.id.sotd),getString(R.string.demo_shiz_sotd)),
+                        TapTarget.forView(findViewById(R.id.eotd),getString(R.string.demo_shiz_eotd)),
+                        TapTarget.forView(findViewById(R.id.about_kpsconnect),getString(R.string.demo_shiz_about_kpsconnect)))
+                .listener(new TapTargetSequence.Listener() {
+                    // This listener will tell us when interesting(tm) events happen in regards
+                    // to the sequence
+                    @Override
+                    public void onSequenceFinish() {
+                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_success,Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSequenceCanceled() {
+                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_fail,Toast.LENGTH_SHORT).show();
+                    }
+                })
+        .start();
+    }
+
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
