@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         super.onCreate(savedInstanceState);
         Pushy.listen(this);
         setContentView(R.layout.activity_main);
+        loadFeeds(FEED_URL);
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             pref = PreferenceManager.getDefaultSharedPreferences(this);
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
             if (is_first_run.equals("yes")) {
-                pref.edit().putString(PREF_FIRST_RUN_KEY,"no").apply();
+                edit = pref.edit();
+                edit.putString(PREF_FIRST_RUN_KEY,"no");
+                edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
             }else {
