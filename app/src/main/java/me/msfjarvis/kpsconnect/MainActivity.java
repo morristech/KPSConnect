@@ -31,6 +31,7 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import org.xdevs23.ui.utils.BarColors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import github.nisrulz.easydeviceinfo.base.EasyIdMod;
@@ -287,12 +288,15 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 Bridge
                         .post(BASE_URL)
                         .header("regID",result)
-                        .header("email", emailString != null ? emailString : null)
+                        .header("email", emailString != null ? emailString : "null")
                         .request();
             }catch (PushyException exc){
-                Log.d("Pushy",exc.toString());
+                Log.d("Pushy",Arrays.toString(exc.getStackTrace()));
             }catch (BridgeException exc){
-                Log.d("Bridge",exc.toString());
+                Log.d("Bridge",Arrays.toString(exc.getStackTrace()));
+            }
+            catch (NullPointerException exc){
+                Log.d("NPE", Arrays.toString(exc.getStackTrace()));
             }
             return result;
         }
