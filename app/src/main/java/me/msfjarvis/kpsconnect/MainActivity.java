@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     public NavigationView navigationView;
-    public static final String BASE_URL = "http://api.msfjarvis.me:2015/regids/register";
+    public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
     public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
     public String result;
     public String selected = "";
