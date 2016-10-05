@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
+                DemoTheShiz();
             }
             if (Pushy.isRegistered(getApplicationContext())){
                 new RegisterForPushNotificationsAsync().execute();
@@ -242,14 +244,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
     public void DemoTheShiz() {
+        drawerLayout.openDrawer(GravityCompat.START);
         new TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.toolbar), getString(R.string.demo_shiz_nav_drawer)),
                         TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
-                        TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)),
                         TapTarget.forView(findViewById(R.id.sotd),getString(R.string.demo_shiz_sotd)),
                         TapTarget.forView(findViewById(R.id.eotd),getString(R.string.demo_shiz_eotd)),
-                        TapTarget.forView(findViewById(R.id.about_kpsconnect),getString(R.string.demo_shiz_about_kpsconnect)))
+                        TapTarget.forView(findViewById(R.id.about_kpsconnect),getString(R.string.demo_shiz_about_kpsconnect)),
+                        TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)))
                 .listener(new TapTargetSequence.Listener() {
                     // This listener will tell us when interesting(tm) events happen in regards
                     // to the sequence
