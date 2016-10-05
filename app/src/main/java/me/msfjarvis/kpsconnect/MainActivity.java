@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
+        initNavigationDrawer();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -93,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             toolbar.inflateMenu(R.menu.menu_main);
-            initNavigationDrawer();
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
@@ -116,8 +116,13 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Log.d(getString(R.string.log_tag), getString(R.string.log_called_home));
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
+        try {
+            ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
+        
+        } catch(Exception e) {
+            ht.replace(R.id.content_main, (new FeedFragment);
+        }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
         if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
