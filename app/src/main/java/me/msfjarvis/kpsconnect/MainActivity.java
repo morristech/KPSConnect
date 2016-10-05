@@ -34,6 +34,9 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 import org.xdevs23.ui.utils.BarColors;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -89,8 +92,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-                DemoTheShiz();
-            }else {
+            }
+            if (Pushy.isRegistered(getApplicationContext())){
                 new RegisterForPushNotificationsAsync().execute();
             }
             toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -151,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .withAboutSpecial1(getString(R.string.changelog_title))
                 .withAboutSpecial1Description(getString(R.string.aboutLibraries_description_special1_text))
     		    .withAboutSpecial2(getString(R.string.about_title_id))
-    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "null")))
+    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "unregistered")))
     		    .withAboutSpecial3(getString(R.string.about_kpsconnect_team_title))
     		    .withAboutSpecial3Description(getString(R.string.about_kpsconnect_team_desc))
                 .supportFragment();
@@ -241,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void DemoTheShiz() {
         new TapTargetSequence(this)
                 .targets(
-                        TapTarget.forView(findViewById(R.id.navigation_view), getString(R.string.demo_shiz_nav_drawer)),
+                        TapTarget.forView(findViewById(R.id.toolbar), getString(R.string.demo_shiz_nav_drawer)),
                         TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
                         TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)),
                         TapTarget.forView(findViewById(R.id.sotd),getString(R.string.demo_shiz_sotd)),
@@ -326,31 +329,20 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         protected String doInBackground(String... params)
         {
             try {
+                Log.d(getString(R.string.log_tag),"Inside AsyncTask");
                 EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
-                String[] emailIds = easyIdMod.getAccounts();
-                String emailString = "";
-                if (emailIds != null && emailIds.length > 0) {
-                    emailString=emailIds[0];
-                    if (!(emailString == null)){
-                        edit.putString(PREF_EMAIL_KEY,emailString);
-                        edit.apply();
-                    }
-                }
-                result = Pushy.register(MainActivity.this);
+                String emailId = easyIdMod.getAccounts()[0];
+                result = Pushy.register(getApplicationContext());
+                new URL(String.format(BASE_URL+"?email=%s&regID=%s", emailId,result)).openConnection();
                 edit.putString(PREF_REGID_KEY,result);
+                edit.putString(PREF_EMAIL_KEY,emailId);
                 edit.apply();
-                Bridge
-                        .post(BASE_URL)
-                        .header("regID",result)
-                        .header("email", emailString != null ? emailString : "null")
-                        .request();
             }catch (PushyException exc){
                 Log.d(getString(R.string.log_tag_pushy),Arrays.toString(exc.getStackTrace()));
-            }catch (BridgeException exc){
-                Log.d(getString(R.string.log_tag_bridge),Arrays.toString(exc.getStackTrace()));
-            }
-            catch (NullPointerException exc){
+            } catch (NullPointerException exc){
                 Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
+            } catch (IOException exc){
+                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
             }
             return result;
         }
