@@ -24,8 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.bridge.Bridge;
-import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -36,7 +34,6 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import org.xdevs23.ui.utils.BarColors;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -244,7 +241,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
     public void DemoTheShiz() {
-        drawerLayout.openDrawer(GravityCompat.START);
+        try{
+            drawerLayout.openDrawer(GravityCompat.START);
+        }catch (NullPointerException exc){
+            exc.printStackTrace();
+        }
         new TapTargetSequence(this)
                 .targets(
                         TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
