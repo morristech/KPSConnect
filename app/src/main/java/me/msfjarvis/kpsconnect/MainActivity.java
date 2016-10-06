@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
         } catch(Exception e) {
-            ht.replace(R.id.content_main, (new FeedFragment);
+            ht.replace(R.id.content_main, new FeedFragment());
         }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
