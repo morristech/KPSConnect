@@ -70,11 +70,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Pushy.listen(this);
         setContentView(R.layout.activity_main);
-        BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
-        BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
+        BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
+        BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
         final Context context = this;
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
+        initNavigationDrawer();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -83,36 +86,29 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         if (isConnected) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
             pref = PreferenceManager.getDefaultSharedPreferences(this);
-            String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
+            String is_first_run = pref.getString(PREF_FIRST_RUN_KEY, "yes");
             if (is_first_run.equals("yes")) {
                 edit = pref.edit();
-                edit.putString(PREF_FIRST_RUN_KEY,"no");
+                edit.putString(PREF_FIRST_RUN_KEY, "no");
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
                 DemoTheShiz();
+            }else {
+                new MaterialDialog.Builder(this)
+                        .title(R.string.app_name)
+                        .content(R.string.not_connected)
+                        .positiveText(R.string.positive_text)
+                        .dismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                finish();
+                            }
+                        })
+                        .show();
             }
-            if (Pushy.isRegistered(getApplicationContext())){
-                new RegisterForPushNotificationsAsync().execute();
-            }
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            toolbar.inflateMenu(R.menu.menu_main);
-            initNavigationDrawer();
-        } else {
-            new MaterialDialog.Builder(this)
-                    .title(R.string.app_name)
-                    .content(R.string.not_connected)
-                    .positiveText(R.string.positive_text)
-                    .dismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            finish();
-                        }
-                    })
-                    .show();
+            onHome();
         }
-        onHome();
     }
 
     @SuppressLint("StringFormatMatches")
@@ -335,13 +331,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 Log.d(getString(R.string.log_tag),"Inside AsyncTask");
                 EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
                 String emailId = easyIdMod.getAccounts()[0];
-                result = Pushy.register(getApplicationContext());
                 new URL(String.format(BASE_URL+"?email=%s&regID=%s", emailId,result)).openConnection();
                 edit.putString(PREF_REGID_KEY,result);
                 edit.putString(PREF_EMAIL_KEY,emailId);
                 edit.apply();
-            }catch (PushyException exc){
-                Log.d(getString(R.string.log_tag_pushy),Arrays.toString(exc.getStackTrace()));
             } catch (NullPointerException exc){
                 Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
             } catch (IOException exc){
