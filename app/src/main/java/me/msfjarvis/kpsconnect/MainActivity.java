@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
+        initNavigationDrawer();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -95,10 +99,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
             if (Pushy.isRegistered(getApplicationContext())){
                 new RegisterForPushNotificationsAsync().execute();
             }
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            toolbar.inflateMenu(R.menu.menu_main);
-            initNavigationDrawer();
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
