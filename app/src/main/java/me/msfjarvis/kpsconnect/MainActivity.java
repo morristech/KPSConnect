@@ -28,6 +28,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.github.javiersantos.bottomdialogs.BottomDialog;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
@@ -47,25 +49,23 @@ import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
-import me.pushy.sdk.Pushy;
-import me.pushy.sdk.exceptions.PushyException;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    public NavigationView navigationView;
     public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
     public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
+    public static final String PREF_FIRST_RUN_KEY = "is_first_run";
+    public static final String PREF_EMAIL_KEY = "email";
+    public static final String PREF_REGID_KEY = "token";
+    public NavigationView navigationView;
     public String result;
     public String selected = "";
     public FeedFragment currentFeedFragmentInstance;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
-    public static final String PREF_FIRST_RUN_KEY = "is_first_run";
-    public static final String PREF_EMAIL_KEY = "email";
-    public static final String PREF_REGID_KEY = "regID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +74,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
         final Context context = this;
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        edit = pref.edit();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
         initNavigationDrawer();
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -85,10 +89,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
-            pref = PreferenceManager.getDefaultSharedPreferences(this);
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY, "yes");
             if (is_first_run.equals("yes")) {
-                edit = pref.edit();
                 edit.putString(PREF_FIRST_RUN_KEY, "no");
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
@@ -321,28 +323,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         actionBarDrawerToggle.syncState();
         onHome();
     }
-    private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
-    {
-
-        @Override
-        protected String doInBackground(String... params)
-        {
-            try {
-                Log.d(getString(R.string.log_tag),"Inside AsyncTask");
-                EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
-                String emailId = easyIdMod.getAccounts()[0];
-                new URL(String.format(BASE_URL+"?email=%s&regID=%s", emailId,result)).openConnection();
-                edit.putString(PREF_REGID_KEY,result);
-                edit.putString(PREF_EMAIL_KEY,emailId);
-                edit.apply();
-            } catch (NullPointerException exc){
-                Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
-            } catch (IOException exc){
-                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
-            }
-            return result;
-        }
-    }
 
     public void onResume(){
         super.onResume();
@@ -369,6 +349,27 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onPause() {
         isPaused = true;
         super.onPause();
+    }
+
+    private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Log.d(getString(R.string.log_tag), "Inside AsyncTask");
+                EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
+                String emailId = easyIdMod.getAccounts()[0];
+                new URL(String.format(BASE_URL + "?email=%s&regID=%s", emailId, result)).openConnection();
+                edit.putString(PREF_REGID_KEY, result);
+                edit.putString(PREF_EMAIL_KEY, emailId);
+                edit.apply();
+            } catch (NullPointerException exc) {
+                Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
+            } catch (IOException exc) {
+                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
+            }
+            return result;
+        }
     }
 
 }
