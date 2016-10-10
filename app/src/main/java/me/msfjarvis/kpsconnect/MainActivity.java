@@ -1,16 +1,23 @@
 package me.msfjarvis.kpsconnect;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsCallback;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -63,9 +70,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
+    CustomTabsClient mClient;
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
     public static final String PREF_EMAIL_KEY = "email";
     public static final String PREF_REGID_KEY = "regID";
+    public static final String FEEDBACK_URL = "https://kpsconnect.msfjarvis.me/feedback.html";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +215,13 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onFailure(String message) {
         Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
+    
+    private void customTab(){
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
+    }
 
     private void ContactMe() {
         String[] TO = {getString(R.string.email_msfjarvis)};
@@ -284,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         selected = "home";
                         break;
                     case R.id.app_feedback:
-                        ContactMe();
+                        customTab();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
