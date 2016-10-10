@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-                DemoTheShiz();
             }
             if (Pushy.isRegistered(getApplicationContext())){
                 new RegisterForPushNotificationsAsync().execute();
@@ -221,69 +220,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
-    }
-
-    private void ContactMe() {
-        String[] TO = {getString(R.string.email_msfjarvis)};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(android.net.Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_about_kps_connect));
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_app)));
-        } catch (android.content.ActivityNotFoundException ex) {
-            new BottomDialog.Builder(this)
-                    .setTitle(getString(R.string.no_email_app_found_title))
-                    .setContent(getString(R.string.no_email_app_found_message))
-                    .setPositiveText(getString(R.string.download_gmail))
-                    .setNegativeText(getString(R.string.ok))
-                    .setCancelable(false)
-                    .onPositive(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(android.net.Uri.parse(getResources().getString(R.string.gmail_link)));
-                            startActivity(i);
-                        }
-                    })
-                    .onNegative(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            dialog.dismiss();
-                        }
-                    }).show();
-        }
-    }
-
-    public void DemoTheShiz() {
-        try{
-            drawerLayout.openDrawer(GravityCompat.START);
-        }catch (NullPointerException exc){
-            exc.printStackTrace();
-        }
-        new TapTargetSequence(this)
-                .targets(
-                        TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
-                        TapTarget.forView(findViewById(R.id.sotd),getString(R.string.demo_shiz_sotd)),
-                        TapTarget.forView(findViewById(R.id.eotd),getString(R.string.demo_shiz_eotd)),
-                        TapTarget.forView(findViewById(R.id.about_kpsconnect),getString(R.string.demo_shiz_about_kpsconnect)),
-                        TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)))
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
-                    @Override
-                    public void onSequenceFinish() {
-                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_success,Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onSequenceCanceled() {
-                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_fail,Toast.LENGTH_SHORT).show();
-                    }
-                })
-        .start();
     }
 
     public void initNavigationDrawer() {
