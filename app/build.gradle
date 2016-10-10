@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "25.2.2"
 
 
     defaultConfig {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 452
-        versionName "4.5.2"
+        versionCode 462
+        versionName "4.6.2"
     }
 signingConfigs
             {
@@ -68,4 +68,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.nisrulz:easydeviceinfo:2.2.0'
     compile 'com.github.javiersantos:BottomDialogs:1.2.1'
+    compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
+    compile 'com.android.support:customtabs:24.0.0+'
 }

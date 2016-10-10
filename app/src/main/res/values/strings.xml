@@ -6,17 +6,13 @@
     <string name="exit">Exit</string>
     <string name="title_activity_about">Used Libraries</string>
     <string name="not_connected">No connection detected. The app needs a working internet connection to function. Press OK to exit.</string>
-    <string name="oops">Oops! That failed. Please send a bug report describing what caused it using the option in the navdrawer</string>
     <string name="title_activity_feedback">Feedback</string>
-    <string name="title">Subject</string>
-    <string name="message">Your message to us goes here</string>
     <string name="slide_1_title">Welcome</string>
     <string name="slide_1_description">Welcome to KPS Connect! Over time you\u0027ll see this intro become more functional, stay tuned!</string>
     <string name="loading_feeds">Loading feeds</string>
     <string name="cancel">Cancel</string>
     <string name="sotd">Student Of The Day</string>
     <string name="eotd">Event Of The Day</string>
-    <string name="email">app@khaitanpublicschool.com</string>
     <string name="aboutLibraries_description_special1_text">
         <![CDATA[
         <i>Version 4.5.0</i><br />
@@ -74,5 +70,15 @@
     <string name="log_tag_npe">NPE</string>
     <string name="log_tag_feedactivity">FeedActivty</string>
     <string name="log_tag_feedview">FeedView</string>
+    <string name="log_tag_internet_connected">Internet is connected!</string>
+    <string name="demo_shiz_nav_drawer">Use the NavigationDrawer to access the stuff of the app</string>
+    <string name="demo_shiz_home">You get your news from here</string>
+    <string name="demo_shiz_feedback">Send feedback from here</string>
+    <string name="demo_shiz_sotd">The Student of the Day gets a mention here!</string>
+    <string name="demo_shiz_eotd">Aaand the EVENT of the day shows up here</string>
+    <string name="demo_shiz_about_kpsconnect">Know a bit more about the app here!</string>
+    <string name="demo_shiz_success">Thanks for finishing the tutorial!</string>
+    <string name="demo_shiz_fail">BOO! You didn\'t complete the tutorial!</string>
+    <string name="api_call">APICall</string>
 
 </resources>

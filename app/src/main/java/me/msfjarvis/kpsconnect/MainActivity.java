@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,15 +25,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.afollestad.bridge.Bridge;
-import com.afollestad.bridge.BridgeException;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 import org.xdevs23.ui.utils.BarColors;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
     public static final String PREF_EMAIL_KEY = "email";
     public static final String PREF_REGID_KEY = "regID";
+    public static final String FEEDBACK_URL = "https://kpsconnect.msfjarvis.me/feedback.html";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
         final Context context = this;
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_main);
         initNavigationDrawer();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         final boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            Log.d("KPSConnect", "Internet is connected!");
+            Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
             pref = PreferenceManager.getDefaultSharedPreferences(this);
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
             if (is_first_run.equals("yes")) {
@@ -88,12 +94,10 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-            }else {
+            }
+            if (Pushy.isRegistered(getApplicationContext())){
                 new RegisterForPushNotificationsAsync().execute();
             }
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            toolbar.inflateMenu(R.menu.menu_main);
         } else {
             new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
@@ -152,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .withAboutSpecial1(getString(R.string.changelog_title))
                 .withAboutSpecial1Description(getString(R.string.aboutLibraries_description_special1_text))
     		    .withAboutSpecial2(getString(R.string.about_title_id))
-    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "null")))
+    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "unregistered")))
     		    .withAboutSpecial3(getString(R.string.about_kpsconnect_team_title))
     		    .withAboutSpecial3Description(getString(R.string.about_kpsconnect_team_desc))
                 .supportFragment();
@@ -204,40 +208,15 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onFailure(String message) {
         Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
-
-    private void ContactMe() {
-        String[] TO = {getString(R.string.email_msfjarvis)};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(android.net.Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_about_kps_connect));
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_app)));
-        } catch (android.content.ActivityNotFoundException ex) {
-            new BottomDialog.Builder(this)
-                    .setTitle(getString(R.string.no_email_app_found_title))
-                    .setContent(getString(R.string.no_email_app_found_message))
-                    .setPositiveText(getString(R.string.download_gmail))
-                    .setNegativeText(getString(R.string.ok))
-                    .setCancelable(false)
-                    .onPositive(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(android.net.Uri.parse(getResources().getString(R.string.gmail_link)));
-                            startActivity(i);
-                        }
-                    })
-                    .onNegative(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            dialog.dismiss();
-                        }
-                    }).show();
-        }
+    
+    private void customTab(){
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
+        builder.setShowTitle(true);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
     }
+
     public void initNavigationDrawer() {
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
@@ -253,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         selected = "home";
                         break;
                     case R.id.app_feedback:
-                        ContactMe();
+                        customTab();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
@@ -301,31 +280,20 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         protected String doInBackground(String... params)
         {
             try {
+                Log.d(getString(R.string.log_tag),"Inside AsyncTask");
                 EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
-                String[] emailIds = easyIdMod.getAccounts();
-                String emailString = "";
-                if (emailIds != null && emailIds.length > 0) {
-                    emailString=emailIds[0];
-                    if (!(emailString == null)){
-                        edit.putString(PREF_EMAIL_KEY,emailString);
-                        edit.apply();
-                    }
-                }
-                result = Pushy.register(MainActivity.this);
+                String emailId = easyIdMod.getAccounts()[0];
+                result = Pushy.register(getApplicationContext());
+                new URL(String.format(BASE_URL+"?email=%s&regID=%s", emailId,result)).openConnection();
                 edit.putString(PREF_REGID_KEY,result);
+                edit.putString(PREF_EMAIL_KEY,emailId);
                 edit.apply();
-                Bridge
-                        .post(BASE_URL)
-                        .header("regID",result)
-                        .header("email", emailString != null ? emailString : "null")
-                        .request();
             }catch (PushyException exc){
                 Log.d(getString(R.string.log_tag_pushy),Arrays.toString(exc.getStackTrace()));
-            }catch (BridgeException exc){
-                Log.d(getString(R.string.log_tag_bridge),Arrays.toString(exc.getStackTrace()));
-            }
-            catch (NullPointerException exc){
+            } catch (NullPointerException exc){
                 Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
+            } catch (IOException exc){
+                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
             }
             return result;
         }
