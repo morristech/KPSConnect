@@ -1,0 +1,9 @@
+{
+  "name": "approve-ci",
+  "approvalCount": 1,
+  "approvalStrings": ["%F0%9F%91%8D", ":+1:", ":thumbsup:", "Looks good to me"],
+  "disapprovalStrings": ["%F0%9F%91%8E", ":-1:", ":thumbsdown:", "Gah, it's shit"],
+  "approveString": "The pull request was approved",
+  "rejectString": "The pull request needs more work",
+  "pendingString": "Waiting for approval"
+}

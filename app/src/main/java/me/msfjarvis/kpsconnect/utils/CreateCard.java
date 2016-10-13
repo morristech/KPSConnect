@@ -24,6 +24,11 @@ public class CreateCard extends Activity {
         return (int) (dpValue * scale + 0.5f);
     }
 
+    public static String trimContent(String mContent, String mTitle){
+        int lengthToTrim = ("The post " + mTitle + " appeared first on Konnectrella").length();
+        return mContent.substring((mContent.length()-lengthToTrim));
+    }
+
     public static CardView newCard(final Context mContext, final Activity activity,
                                    int mRadius, int mPadding,
                                    int mMaxElevation, int mElevation, String mBackgroundColor,
@@ -118,7 +123,7 @@ public class CreateCard extends Activity {
                     Intent intent = new Intent(mContext, FeedActivity.class);
                     intent.putExtra("title",mTitle);
                     intent.putExtra("category",mCategory);
-                    intent.putExtra("content",mContent);
+                    intent.putExtra("content",trimContent(mContent, mTitle));
                     intent.putExtra("featuredImage",mImageURL);
                     try{
                         activity.startActivity(intent);
