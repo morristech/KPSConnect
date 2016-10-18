@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -142,12 +141,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 .withAboutIconShown(true)
                 .withAboutVersionShown(true)
                 .withAboutDescription(getString(R.string.about_kpsconnect_desc))
-                .withAboutSpecial1(getString(R.string.changelog_title))
-                .withAboutSpecial1Description(getString(R.string.aboutLibraries_description_special1_text))
-    		    .withAboutSpecial2(getString(R.string.about_title_id))
-    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "unregistered")))
-    		    .withAboutSpecial3(getString(R.string.about_kpsconnect_team_title))
-    		    .withAboutSpecial3Description(getString(R.string.about_kpsconnect_team_desc))
+                .withAboutSpecial1(getString(R.string.about_kpsconnect_team_title))
+                .withAboutSpecial1Description(getString(R.string.about_kpsconnect_team_desc))
                 .supportFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment);
