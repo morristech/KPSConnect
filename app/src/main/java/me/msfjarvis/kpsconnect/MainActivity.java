@@ -1,12 +1,9 @@
 package me.msfjarvis.kpsconnect;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -42,6 +39,7 @@ import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
+import me.msfjarvis.kpsconnect.utils.AppStatus;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
     public static final String FEED_URL = String.valueOf(R.string.feed_url);
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         setContentView(R.layout.activity_main);
         BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
-        final Context context = this;
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         edit = pref.edit();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,12 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         initNavigationDrawer();
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        final boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
+        if (AppStatus.getInstance(this).isOnline()) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY, "yes");
             if (is_first_run.equals("yes")) {
