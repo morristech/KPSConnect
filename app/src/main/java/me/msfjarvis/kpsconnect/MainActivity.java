@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -44,22 +45,19 @@ import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
-    public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
-    public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
+    public static final String FEED_URL = String.valueOf(R.string.feed_url);
+    public static final String FEEDBACK_URL = String.valueOf(R.string.feedback_url);
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
-    public static final String PREF_EMAIL_KEY = "email";
     public static final String PREF_REGID_KEY = "token";
-    public NavigationView navigationView;
-    public String result;
     public String selected = "";
+    private boolean isPaused = false;
+    private boolean areFeedsLoading = false;
     public FeedFragment currentFeedFragmentInstance;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
-    private boolean isPaused = false;
-    private boolean areFeedsLoading = false;
+    private NavigationView navigationView;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
-    public static final String FEEDBACK_URL = "https://kpsconnect.msfjarvis.me/feedback.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     
     private void customTab(){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
