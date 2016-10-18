@@ -40,10 +40,9 @@ import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
 import me.msfjarvis.kpsconnect.utils.AppStatus;
+import me.msfjarvis.kpsconnect.utils.Variables;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
-    public static final String FEED_URL = String.valueOf(R.string.feed_url);
-    public static final String FEEDBACK_URL = String.valueOf(R.string.feedback_url);
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
     public static final String PREF_REGID_KEY = "token";
     public String selected = "";
@@ -53,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    private SharedPreferences pref;
-    private SharedPreferences.Editor edit;
+    private MaterialDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         setContentView(R.layout.activity_main);
         BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
-        edit = pref.edit();
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor edit = pref.edit();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
@@ -78,19 +76,19 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-            } else {
-                new MaterialDialog.Builder(this)
-                        .title(R.string.app_name)
-                        .content(R.string.not_connected)
-                        .positiveText(R.string.positive_text)
-                        .dismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                finish();
-                            }
-                        })
-                        .show();
             }
+        } else {
+            dialog = new MaterialDialog.Builder(this)
+                    .title(R.string.app_name)
+                    .content(R.string.not_connected)
+                    .positiveText(R.string.positive_text)
+                    .dismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if (currentFeedFragmentInstance==null){finish();}
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
-        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
+        if(currentFeedFragmentInstance == null) loadFeeds(new Variables().FEED_URL);
     }
     public void onSotd() {
         if(isPaused) return;
@@ -189,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
+        customTabsIntent.launchUrl(this, Uri.parse(new Variables().FEEDBACK_URL));
     }
 
     public void initNavigationDrawer() {
@@ -273,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     @Override
     public void onPause() {
         isPaused = true;
+        if (dialog!=null){dialog.dismiss();}
         super.onPause();
     }
 
