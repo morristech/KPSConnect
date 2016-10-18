@@ -7,14 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,9 +25,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -35,13 +32,9 @@ import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
 import org.xdevs23.ui.utils.BarColors;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import github.nisrulz.easydeviceinfo.base.EasyIdMod;
 import me.msfjarvis.kpsconnect.activities.MainIntroActivity;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
@@ -66,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private boolean areFeedsLoading = false;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
+    public static final String FEEDBACK_URL = "https://kpsconnect.msfjarvis.me/feedback.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-                DemoTheShiz();
-            }else {
+            } else {
                 new MaterialDialog.Builder(this)
                         .title(R.string.app_name)
                         .content(R.string.not_connected)
@@ -109,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         })
                         .show();
             }
-            onHome();
         }
     }
 
@@ -119,8 +111,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Log.d(getString(R.string.log_tag), getString(R.string.log_called_home));
         drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
-        ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
+        try {
+            ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
                 :  currentFeedFragmentInstance));
+        } catch(Exception e) {
+            ht.replace(R.id.content_main, new FeedFragment());
+        }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
         if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
@@ -203,68 +199,13 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onFailure(String message) {
         Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
-
-    private void ContactMe() {
-        String[] TO = {getString(R.string.email_msfjarvis)};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setData(android.net.Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_about_kps_connect));
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_app)));
-        } catch (android.content.ActivityNotFoundException ex) {
-            new BottomDialog.Builder(this)
-                    .setTitle(getString(R.string.no_email_app_found_title))
-                    .setContent(getString(R.string.no_email_app_found_message))
-                    .setPositiveText(getString(R.string.download_gmail))
-                    .setNegativeText(getString(R.string.ok))
-                    .setCancelable(false)
-                    .onPositive(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(android.net.Uri.parse(getResources().getString(R.string.gmail_link)));
-                            startActivity(i);
-                        }
-                    })
-                    .onNegative(new BottomDialog.ButtonCallback() {
-                        @Override
-                        public void onClick(@NonNull BottomDialog dialog) {
-                            dialog.dismiss();
-                        }
-                    }).show();
-        }
-    }
-
-    public void DemoTheShiz() {
-        try{
-            drawerLayout.openDrawer(GravityCompat.START);
-        }catch (NullPointerException exc){
-            exc.printStackTrace();
-        }
-        new TapTargetSequence(this)
-                .targets(
-                        TapTarget.forView(findViewById(R.id.home),getString(R.string.demo_shiz_home)),
-                        TapTarget.forView(findViewById(R.id.sotd),getString(R.string.demo_shiz_sotd)),
-                        TapTarget.forView(findViewById(R.id.eotd),getString(R.string.demo_shiz_eotd)),
-                        TapTarget.forView(findViewById(R.id.about_kpsconnect),getString(R.string.demo_shiz_about_kpsconnect)),
-                        TapTarget.forView(findViewById(R.id.app_feedback),getString(R.string.demo_shiz_feedback)))
-                .listener(new TapTargetSequence.Listener() {
-                    // This listener will tell us when interesting(tm) events happen in regards
-                    // to the sequence
-                    @Override
-                    public void onSequenceFinish() {
-                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_success,Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onSequenceCanceled() {
-                        Toast.makeText(getApplicationContext(), R.string.demo_shiz_fail,Toast.LENGTH_SHORT).show();
-                    }
-                })
-        .start();
+    
+    private void customTab(){
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
+        builder.setShowTitle(true);
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
     }
 
     public void initNavigationDrawer() {
@@ -282,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         selected = "home";
                         break;
                     case R.id.app_feedback:
-                        ContactMe();
+                        customTab();
                         drawerLayout.closeDrawers();
                         break;
                     case R.id.about_kpsconnect:
@@ -349,27 +290,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onPause() {
         isPaused = true;
         super.onPause();
-    }
-
-    private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                Log.d(getString(R.string.log_tag), "Inside AsyncTask");
-                EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
-                String emailId = easyIdMod.getAccounts()[0];
-                new URL(String.format(BASE_URL + "?email=%s&regID=%s", emailId, result)).openConnection();
-                edit.putString(PREF_REGID_KEY, result);
-                edit.putString(PREF_EMAIL_KEY, emailId);
-                edit.apply();
-            } catch (NullPointerException exc) {
-                Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
-            } catch (IOException exc) {
-                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
-            }
-            return result;
-        }
     }
 
 }
