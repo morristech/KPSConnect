@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
     public static final String PREF_REGID_KEY = "token";
     public String selected = "";
+    public FeedFragment currentFeedFragmentInstance;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
-    public FeedFragment currentFeedFragmentInstance;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
-        if(currentFeedFragmentInstance == null) loadFeeds(new Variables().FEED_URL);
+        if (currentFeedFragmentInstance == null) loadFeeds(new Variables().getFeedUrl());
     }
     public void onSotd() {
         if(isPaused) return;
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(new Variables().FEEDBACK_URL));
+        customTabsIntent.launchUrl(this, Uri.parse(new Variables().getFeedbackUrl()));
     }
 
     public void initNavigationDrawer() {
