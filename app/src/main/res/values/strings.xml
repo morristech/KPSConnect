@@ -35,5 +35,7 @@
     <string name="log_tag_feedview">FeedView</string>
     <string name="log_tag_internet_connected">Internet is connected!</string>
     <string name="feed_null_intent_error_text">Error! No data received to show.</string>
-
+    <string name="player_error">Error initializing YouTube player : %s</string>
+    <string name="seek_to">Jump To</string>
+    <string name="seek_to_hint">Seconds</string>
 </resources>

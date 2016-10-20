@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.msfjarvis.kpsconnect.activities.MainIntroActivity;
+import me.msfjarvis.kpsconnect.activities.YouTubeShizActivity;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
@@ -70,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         new PrimaryDrawerItem().withName(R.string.eotd).withIcon(R.drawable.ic_event_black_24dp).withIdentifier(3).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.sotd).withIcon(R.drawable.ic_school_black_24dp).withIdentifier(4).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false),
-                        new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(6).withSelectable(false)
+                        new PrimaryDrawerItem().withName("Our Launch Video").withIcon(R.drawable.ic_featured_video_black_24dp).withIdentifier(6).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(7).withSelectable(false)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -87,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                             } else if (drawerItem.getIdentifier() == 5) {
                                 customTab();
                             } else if (drawerItem.getIdentifier() == 6) {
+                                Intent youTubeIntent = new Intent(getApplicationContext(), YouTubeShizActivity.class);
+                                startActivity(youTubeIntent);
+                            } else if (drawerItem.getIdentifier() == 7) {
                                 finish();
                             }
                         }
