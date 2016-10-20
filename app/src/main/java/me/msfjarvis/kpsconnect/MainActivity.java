@@ -7,17 +7,12 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,6 +21,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.xdevs23.ui.utils.BarColors;
 
@@ -45,14 +44,10 @@ import me.msfjarvis.kpsconnect.utils.Variables;
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
     public static final String PREF_REGID_KEY = "token";
-    public String selected = "";
     public FeedFragment currentFeedFragmentInstance;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private MaterialDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +57,51 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit = pref.edit();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
-        initNavigationDrawer();
-        FirebaseMessaging.getInstance().subscribeToTopic("news");
-        edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withHeader(R.layout.nav_header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.home).withIcon(R.drawable.ic_home_black_24dp).withIdentifier(1).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_about).withIcon(R.drawable.ic_info_black_24dp).withIdentifier(2).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.eotd).withIcon(R.drawable.ic_event_black_24dp).withIdentifier(3).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.sotd).withIcon(R.drawable.ic_school_black_24dp).withIdentifier(4).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false),
+                        new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(6).withSelectable(false)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (drawerItem != null) {
+                            if (drawerItem.getIdentifier() == 1) {
+                                onHome();
+                            } else if (drawerItem.getIdentifier() == 2) {
+                                onAbout();
+                            } else if (drawerItem.getIdentifier() == 3) {
+                                onEotd();
+                            } else if (drawerItem.getIdentifier() == 4) {
+                                onSotd();
+                            } else if (drawerItem.getIdentifier() == 5) {
+                                customTab();
+                            } else if (drawerItem.getIdentifier() == 6) {
+                                finish();
+                            }
+                        }
+                        return false;
+                    }
+                })
+                .withSavedInstance(savedInstanceState)
+                .build();
+        if (result != null) {
+            result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+        }
         if (AppStatus.getInstance(this).isOnline()) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
+            FirebaseMessaging.getInstance().subscribeToTopic("news");
+            edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
             String is_first_run = pref.getString(PREF_FIRST_RUN_KEY, "yes");
             if (is_first_run.equals("yes")) {
                 edit.putString(PREF_FIRST_RUN_KEY, "no");
@@ -78,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 startActivity(introIntent);
             }
         } else {
-            dialog = new MaterialDialog.Builder(this)
+            new MaterialDialog.Builder(this)
                     .title(R.string.app_name)
                     .content(R.string.not_connected)
                     .positiveText(R.string.positive_text)
@@ -96,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onHome() {
         if(isPaused) return;
         Log.d(getString(R.string.log_tag), getString(R.string.log_called_home));
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         try {
             ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
@@ -110,14 +141,12 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
     public void onSotd() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new SOTDFragment());
         ht.commit();
     }
     public void onEotd() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new EOTDFragment());
         ht.commit();
@@ -125,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onAbout() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         LibsSupportFragment fragment = new LibsBuilder()
         		.withAboutAppName("KPS Connect")
                 .withAboutIconShown(true)
@@ -190,88 +218,14 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         customTabsIntent.launchUrl(this, Uri.parse(new Variables().getFeedbackUrl()));
     }
 
-    public void initNavigationDrawer() {
-        navigationView = (NavigationView)findViewById(R.id.navigation_view);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
-        assert navigationView != null;
-        selected = "home";
-        navigationView.setCheckedItem(R.id.home);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home:
-                        onHome();
-                        selected = "home";
-                        break;
-                    case R.id.app_feedback:
-                        customTab();
-                        drawerLayout.closeDrawers();
-                        break;
-                    case R.id.about_kpsconnect:
-                        selected = "about_kpsconnect";
-                        onAbout();
-                        break;
-                    case R.id.sotd:
-                        selected = "sotd";
-                        onSotd();
-                        break;
-                    case R.id.eotd:
-                        selected = "eotd";
-                        onEotd();
-                        break;
-                    case R.id.logout:
-                        finish();
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
-
-            @Override
-            public void onDrawerClosed(View v){
-                super.onDrawerClosed(v);
-            }
-
-            @Override
-            public void onDrawerOpened(View v) {
-                super.onDrawerOpened(v);
-            }
-        };
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        onHome();
-    }
-
     public void onResume(){
         super.onResume();
         isPaused = false;
-        switch (selected){
-            case "home":
-                navigationView.setCheckedItem(R.id.home);
-                break;
-            case "about_kpsconnect":
-                navigationView.setCheckedItem(R.id.about_kpsconnect);
-                break;
-            case "eotd":
-                navigationView.setCheckedItem(R.id.eotd);
-                break;
-            case "sotd":
-                navigationView.setCheckedItem(R.id.sotd);
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
     public void onPause() {
         isPaused = true;
-        if (dialog!=null){dialog.dismiss();}
         super.onPause();
     }
 
