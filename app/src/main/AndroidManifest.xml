@@ -39,6 +39,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.FeedActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.YouTubeShizActivity" android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".services.MyFirebaseMessagingService"

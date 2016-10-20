@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -128,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                     })
                     .show();
         }
+        onHome();
     }
 
     @SuppressLint("StringFormatMatches")
