@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -49,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
+        startUpdateCheck();
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -222,6 +224,21 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(new Variables().getFeedbackUrl()));
+    }
+
+    public void startUpdateCheck() {
+        if (BuildConfig.VERSION_NAME.contains("beta")) {
+            new AppUpdater(this)
+                    .setUpdateFrom(UpdateFrom.XML)
+                    .showAppUpdated(true)
+                    .setUpdateXML("https://gist.githubusercontent.com/MSF-Jarvis/26c38295d0ca48a8b1ac902fe1b6b388/raw/6409c087acc1f6323d6df07928a623a9a462c73b/manifest.xml")
+                    .start();
+        } else {
+            new AppUpdater(this)
+                    .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                    .showAppUpdated(true)
+                    .start();
+        }
     }
 
     public void onResume(){

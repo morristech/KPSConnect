@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 470
-        versionName "4.7.0"
+        versionName "4.7.0-beta"
     }
 signingConfigs
             {
@@ -26,6 +26,7 @@ signingConfigs
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources true
+            buildConfigField "boolean", "beta", "true"
         }
         debug {
             debuggable true
@@ -64,5 +65,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.github.javiersantos:AppUpdater:2.4'
 }
 apply plugin: 'com.google.gms.google-services'
