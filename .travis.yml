@@ -15,6 +15,7 @@ android:
 
 script:
     - . buildReleaseApp.sh
+    - . upload_artifact.sh
 
 notifications:
   email: true
