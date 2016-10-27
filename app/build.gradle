@@ -66,5 +66,6 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.github.javiersantos:AppUpdater:2.4'
+    compile 'com.github.barteksc:android-pdf-viewer:2.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
