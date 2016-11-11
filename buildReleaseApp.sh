@@ -6,9 +6,7 @@ source configure.sh
 echo "Building..."
 ./gradlew clean assembleRelease
 
-if [ ! -a app/app-release.apk ]
-  then
-    cp app/build/outputs/apk/app-release.apk app/app-release.apk
-fi
+[ -f app/app-release.apk ] || cp app/build/outputs/apk/app-release.apk app/app-release.apk
+[ -f app/app-release.apk ] && echo "APK Compiled" || exit 1
 
 echo "Build finished!"

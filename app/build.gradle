@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "24.0.2"
-
 
     defaultConfig {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
-        targetSdkVersion 24
-        versionCode 463
-        versionName "4.6.3"
+        targetSdkVersion 25
+        versionCode 471
+        versionName "4.7.1-beta"
     }
 signingConfigs
             {
@@ -27,6 +26,7 @@ signingConfigs
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources true
+            buildConfigField "boolean", "beta", "true"
         }
         debug {
             debuggable true
@@ -52,22 +52,20 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.7.0@aar') {
         transitive = true
     }
-    compile(
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.3'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.3'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.3']
-    )
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:cardview-v7:24.2.1'
+    compile('com.mikepenz:materialdrawer:5.6.0@aar') {
+        transitive = true
+    }
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:cardview-v7:25.0.0'
+    compile 'com.android.support:customtabs:25.0.0'
     compile 'org.jsoup:jsoup:1.7.2'
-    compile 'com.afollestad:bridge:3.2.5'
-    compile 'me.pushy:sdk:1.0.10'
     compile 'com.heinrichreimersoftware:material-intro:1.5.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.nisrulz:easydeviceinfo:2.2.0'
-    compile 'com.github.javiersantos:BottomDialogs:1.2.1'
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
-    compile 'com.android.support:customtabs:24.0.0+'
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.github.javiersantos:AppUpdater:2.4'
+    compile 'com.github.barteksc:android-pdf-viewer:2.1.0'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -1,102 +1,120 @@
 package me.msfjarvis.kpsconnect;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.github.javiersantos.appupdater.AppUpdater;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.xdevs23.ui.utils.BarColors;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import github.nisrulz.easydeviceinfo.base.EasyIdMod;
 import me.msfjarvis.kpsconnect.activities.MainIntroActivity;
+import me.msfjarvis.kpsconnect.activities.YouTubeShizActivity;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
-import me.pushy.sdk.Pushy;
-import me.pushy.sdk.exceptions.PushyException;
+import me.msfjarvis.kpsconnect.utils.AppStatus;
+import me.msfjarvis.kpsconnect.utils.Variables;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-    public NavigationView navigationView;
-    public static final String BASE_URL = "https://api.msfjarvis.me/regids/register";
-    public static final String FEED_URL = "http://khaitanpublicschool.com/blog/feed/";
-    public String result;
-    public String selected = "";
+    public static final String PREF_FIRST_RUN_KEY = "is_first_run";
+    public static final String PREF_REGID_KEY = "token";
     public FeedFragment currentFeedFragmentInstance;
     private boolean isPaused = false;
     private boolean areFeedsLoading = false;
-    private SharedPreferences pref;
-    private SharedPreferences.Editor edit;
-    public static final String PREF_FIRST_RUN_KEY = "is_first_run";
-    public static final String PREF_EMAIL_KEY = "email";
-    public static final String PREF_REGID_KEY = "regID";
-    public static final String FEEDBACK_URL = "https://kpsconnect.msfjarvis.me/feedback.html";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Pushy.listen(this);
         setContentView(R.layout.activity_main);
-        BarColors.setStatusBarColor(R.color.colorPrimaryDark,getWindow());
-        BarColors.setNavigationBarColor(R.color.colorPrimaryDark,getWindow());
-        final Context context = this;
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
+        BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor edit = pref.edit();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
-        initNavigationDrawer();
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        final boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        if (isConnected) {
+        startUpdateCheck();
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withHeader(R.layout.nav_header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.home).withIcon(R.drawable.ic_home_black_24dp).withIdentifier(1).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_about).withIcon(R.drawable.ic_info_black_24dp).withIdentifier(2).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.eotd).withIcon(R.drawable.ic_event_black_24dp).withIdentifier(3).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.sotd).withIcon(R.drawable.ic_school_black_24dp).withIdentifier(4).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false).withEnabled(0),
+                        new PrimaryDrawerItem().withName("Our Launch Video").withIcon(R.drawable.ic_featured_video_black_24dp).withIdentifier(6).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(7).withSelectable(false)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (drawerItem != null) {
+                            if (drawerItem.getIdentifier() == 1) {
+                                onHome();
+                            } else if (drawerItem.getIdentifier() == 2) {
+                                onAbout();
+                            } else if (drawerItem.getIdentifier() == 3) {
+                                onEotd();
+                            } else if (drawerItem.getIdentifier() == 4) {
+                                onSotd();
+                            } else if (drawerItem.getIdentifier() == 5) {
+                                customTab();
+                            } else if (drawerItem.getIdentifier() == 6) {
+                                Intent youTubeIntent = new Intent(getApplicationContext(), YouTubeShizActivity.class);
+                                startActivity(youTubeIntent);
+                            } else if (drawerItem.getIdentifier() == 7) {
+                                finish();
+                            }
+                        }
+                        return false;
+                    }
+                })
+                .withSavedInstance(savedInstanceState)
+                .build();
+        if (result != null) {
+            result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+        }
+        if (AppStatus.getInstance(this).isOnline()) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
-            pref = PreferenceManager.getDefaultSharedPreferences(this);
-            String is_first_run = pref.getString(PREF_FIRST_RUN_KEY,"yes");
+            FirebaseMessaging.getInstance().subscribeToTopic("news");
+            edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
+            String is_first_run = pref.getString(PREF_FIRST_RUN_KEY, "yes");
             if (is_first_run.equals("yes")) {
-                edit = pref.edit();
-                edit.putString(PREF_FIRST_RUN_KEY,"no");
+                edit.putString(PREF_FIRST_RUN_KEY, "no");
                 edit.apply();
                 Intent introIntent = new Intent(this, MainIntroActivity.class);
                 startActivity(introIntent);
-            }
-            if (Pushy.isRegistered(getApplicationContext())){
-                new RegisterForPushNotificationsAsync().execute();
             }
         } else {
             new MaterialDialog.Builder(this)
@@ -106,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                     .dismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            finish();
+                            if (currentFeedFragmentInstance==null){finish();}
                         }
                     })
                     .show();
@@ -118,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     public void onHome() {
         if(isPaused) return;
         Log.d(getString(R.string.log_tag), getString(R.string.log_called_home));
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         try {
             ht.replace(R.id.content_main, (currentFeedFragmentInstance == null ? new Fragment()
@@ -128,18 +145,16 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
-        if(currentFeedFragmentInstance == null) loadFeeds(FEED_URL);
+        if (currentFeedFragmentInstance == null) loadFeeds(new Variables().getFeedUrl());
     }
     public void onSotd() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new SOTDFragment());
         ht.commit();
     }
     public void onEotd() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         FragmentTransaction ht = getSupportFragmentManager().beginTransaction();
         ht.replace(R.id.content_main, new EOTDFragment());
         ht.commit();
@@ -147,18 +162,13 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
 
     public void onAbout() {
         if(isPaused) return;
-        drawerLayout.closeDrawers();
         LibsSupportFragment fragment = new LibsBuilder()
         		.withAboutAppName("KPS Connect")
                 .withAboutIconShown(true)
                 .withAboutVersionShown(true)
                 .withAboutDescription(getString(R.string.about_kpsconnect_desc))
-                .withAboutSpecial1(getString(R.string.changelog_title))
-                .withAboutSpecial1Description(getString(R.string.aboutLibraries_description_special1_text))
-    		    .withAboutSpecial2(getString(R.string.about_title_id))
-    		    .withAboutSpecial2Description(String.format(getString(R.string.about_kpsconnect_id_desc), pref.getString("regID", "unregistered")))
-    		    .withAboutSpecial3(getString(R.string.about_kpsconnect_team_title))
-    		    .withAboutSpecial3Description(getString(R.string.about_kpsconnect_team_desc))
+                .withAboutSpecial1(getString(R.string.about_kpsconnect_team_title))
+                .withAboutSpecial1Description(getString(R.string.about_kpsconnect_team_desc))
                 .supportFragment();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, fragment);
@@ -211,113 +221,29 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     
     private void customTab(){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(getResources().getColor(R.color.colorPrimaryDark));
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(FEEDBACK_URL));
+        customTabsIntent.launchUrl(this, Uri.parse(new Variables().getFeedbackUrl()));
     }
 
-    public void initNavigationDrawer() {
-        navigationView = (NavigationView)findViewById(R.id.navigation_view);
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
-        assert navigationView != null;
-        selected = "home";
-        navigationView.setCheckedItem(R.id.home);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.home:
-                        onHome();
-                        selected = "home";
-                        break;
-                    case R.id.app_feedback:
-                        customTab();
-                        drawerLayout.closeDrawers();
-                        break;
-                    case R.id.about_kpsconnect:
-                        selected = "about_kpsconnect";
-                        onAbout();
-                        break;
-                    case R.id.sotd:
-                        selected = "sotd";
-                        onSotd();
-                        break;
-                    case R.id.eotd:
-                        selected = "eotd";
-                        onEotd();
-                        break;
-                    case R.id.logout:
-                        finish();
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
-
-            @Override
-            public void onDrawerClosed(View v){
-                super.onDrawerClosed(v);
-            }
-
-            @Override
-            public void onDrawerOpened(View v) {
-                super.onDrawerOpened(v);
-            }
-        };
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-        onHome();
-    }
-    private class RegisterForPushNotificationsAsync extends AsyncTask<String, Void, String>
-    {
-
-        @Override
-        protected String doInBackground(String... params)
-        {
-            try {
-                Log.d(getString(R.string.log_tag),"Inside AsyncTask");
-                EasyIdMod easyIdMod = new EasyIdMod(getApplicationContext());
-                String emailId = easyIdMod.getAccounts()[0];
-                result = Pushy.register(getApplicationContext());
-                new URL(String.format(BASE_URL+"?email=%s&regID=%s", emailId,result)).openConnection();
-                edit.putString(PREF_REGID_KEY,result);
-                edit.putString(PREF_EMAIL_KEY,emailId);
-                edit.apply();
-            }catch (PushyException exc){
-                Log.d(getString(R.string.log_tag_pushy),Arrays.toString(exc.getStackTrace()));
-            } catch (NullPointerException exc){
-                Log.d(getString(R.string.log_tag_npe), Arrays.toString(exc.getStackTrace()));
-            } catch (IOException exc){
-                Log.d(getString(R.string.api_call), Arrays.toString(exc.getStackTrace()));
-            }
-            return result;
+    public void startUpdateCheck() {
+        if (BuildConfig.VERSION_NAME.contains("beta")) {
+            new AppUpdater(this)
+                    .setUpdateFrom(UpdateFrom.XML)
+                    .showAppUpdated(true)
+                    .setUpdateXML("https://gist.githubusercontent.com/MSF-Jarvis/26c38295d0ca48a8b1ac902fe1b6b388/raw/6409c087acc1f6323d6df07928a623a9a462c73b/manifest.xml")
+                    .start();
+        } else {
+            new AppUpdater(this)
+                    .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                    .showAppUpdated(true)
+                    .start();
         }
     }
 
     public void onResume(){
         super.onResume();
         isPaused = false;
-        switch (selected){
-            case "home":
-                navigationView.setCheckedItem(R.id.home);
-                break;
-            case "about_kpsconnect":
-                navigationView.setCheckedItem(R.id.about_kpsconnect);
-                break;
-            case "eotd":
-                navigationView.setCheckedItem(R.id.eotd);
-                break;
-            case "sotd":
-                navigationView.setCheckedItem(R.id.sotd);
-                break;
-            default:
-                break;
-        }
     }
 
     @Override

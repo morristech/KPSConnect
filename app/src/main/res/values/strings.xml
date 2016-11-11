@@ -13,29 +13,6 @@
     <string name="cancel">Cancel</string>
     <string name="sotd">Student Of The Day</string>
     <string name="eotd">Event Of The Day</string>
-    <string name="aboutLibraries_description_special1_text">
-        <![CDATA[
-        <i>Version 4.5.0</i><br />
-        - Split up permissions slides<br />
-        - Log user\'s email IDs for personalised notifications<br />
-        - Fix a couple of major bugs<br />
-        - Cleanup code<br />
-        <i>Version 4.3.0</i><br />
-        - Show loading dialog on start<br />
-        - Add animations to feed and feedback activities<br />
-        - Make registration ID info more clear<br />
-        <i>Version 4.2.0</i><br />
-        - Make Used Libraries section more useful
-        <br />
-        <i>Version 4.1.0</i><br />
-        - Initial public release
-        <br />
-        <i>Version 4.0.0</i><br />
-        - Massive improvements to feed<br />
-        <i>Version 3.0.0-beta</i><br />
-        - Last beta version<br />
-        ]]>
-    </string>
     <string name="i_lead_category_hack_error_text">I-Lead posts have no content :(</string>
     <string name="usage_title">Usage</string>
     <string name="usage_desc">Tap on a card to read the post, long press to share</string>
@@ -44,20 +21,9 @@
     <string name="permissions_contact_title">Contact Permissions</string>
     <string name="permissions_contact_desc">We use your email ID to send personalised notifications whenever needed, that needs contact permissions. We do NOT read your contacts EVER.</string>
     <string name="permissions_grant_error_text">You need to grant the permission first!</string>
-    <string name="email_about_kps_connect">Email about KPS Connect</string>
-    <string name="choose_email_app">Choose your Email app</string>
-    <string name="no_email_app_found_title">No Email app found</string>
-    <string name="no_email_app_found_message">No Email app was found on your device. Would you like to install Gmail?</string>
-    <string name="download_gmail">Install Gmail</string>
-    <string name="ok">OK</string>
-    <string name="gmail_link">https://play.google.com/store/apps/details?id=com.google.android.gm</string>
     <string name="about_kpsconnect_desc">These are the libraries used to make the app. Each guy did a fab job!</string>
-    <string name="changelog_title">Changelog</string>
-    <string name="about_title_id">ID</string>
-    <string name="about_kpsconnect_id_desc"><![CDATA[<b>Notification registration ID</b><br /><br />%s<br /><br />Send this to us if you feel you are not getting notifications]]></string>
     <string name="about_kpsconnect_team_title">Team</string>
     <string name="about_kpsconnect_team_desc"><![CDATA[<ul><li><b>Harsh Shandilya</b></li><br /><li><b>Arjun Roy</b></li><br /><li><b>Amit Kumar</b></li><br /><li><b>Manika Pal</b></i><br /></ul><br /><i>Special thanks to Ayush Kaushik</i>]]></string>
-    <string name="email_msfjarvis">msfjarvis@gmail.com</string>
     <string name="log_tag">KPSConnect</string>
     <string name="log_feeds_loaded">Feeds Loaded</string>
     <string name="log_calling_home">Calling home!</string>
@@ -65,20 +31,11 @@
     <string name="positive_text">OK</string>
     <string name="log_called_home">Called home!</string>
     <string name="log_null_check_feed">Is the current feed fragment instance null? %s</string>
-    <string name="log_tag_pushy">Pushy</string>
-    <string name="log_tag_bridge">Bridge</string>
-    <string name="log_tag_npe">NPE</string>
     <string name="log_tag_feedactivity">FeedActivty</string>
     <string name="log_tag_feedview">FeedView</string>
     <string name="log_tag_internet_connected">Internet is connected!</string>
-    <string name="demo_shiz_nav_drawer">Use the NavigationDrawer to access the stuff of the app</string>
-    <string name="demo_shiz_home">You get your news from here</string>
-    <string name="demo_shiz_feedback">Send feedback from here</string>
-    <string name="demo_shiz_sotd">The Student of the Day gets a mention here!</string>
-    <string name="demo_shiz_eotd">Aaand the EVENT of the day shows up here</string>
-    <string name="demo_shiz_about_kpsconnect">Know a bit more about the app here!</string>
-    <string name="demo_shiz_success">Thanks for finishing the tutorial!</string>
-    <string name="demo_shiz_fail">BOO! You didn\'t complete the tutorial!</string>
-    <string name="api_call">APICall</string>
-
+    <string name="feed_null_intent_error_text">Error! No data received to show.</string>
+    <string name="player_error">Error initializing YouTube player : %s</string>
+    <string name="seek_to">Jump To</string>
+    <string name="seek_to_hint">Seconds</string>
 </resources>

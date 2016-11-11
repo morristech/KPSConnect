@@ -40,15 +40,7 @@ public class MainIntroActivity extends IntroActivity {
                     .permissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE})
                     .build();
 
-            final SimpleSlide contactPermissionsSlide = new SimpleSlide.Builder()
-                    .title(R.string.permissions_contact_title)
-                    .description(R.string.permissions_contact_desc)
-                    .background(R.color.white)
-                    .permissions(new String[] {Manifest.permission.GET_ACCOUNTS})
-                    .build();
-
             addSlide(storagePermissionsSlide);
-            addSlide(contactPermissionsSlide);
 
             addOnNavigationBlockedListener(new OnNavigationBlockedListener() {
                 @Override
@@ -57,7 +49,7 @@ public class MainIntroActivity extends IntroActivity {
                     if (contentView != null) {
                         Slide slide = getSlide(position);
 
-                        if (slide.equals(contactPermissionsSlide) || slide.equals(storagePermissionsSlide)) {
+                        if (slide.equals(storagePermissionsSlide)) {
                             Snackbar.make(contentView, R.string.permissions_grant_error_text, Snackbar.LENGTH_LONG).show();
                         }
                     }
