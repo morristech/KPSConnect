@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         new PrimaryDrawerItem().withName(R.string.title_activity_about).withIcon(R.drawable.ic_info_black_24dp).withIdentifier(2).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.eotd).withIcon(R.drawable.ic_event_black_24dp).withIdentifier(3).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.sotd).withIcon(R.drawable.ic_school_black_24dp).withIdentifier(4).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false).withEnabled(0),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false).withEnabled(true),
                         new PrimaryDrawerItem().withName("Our Launch Video").withIcon(R.drawable.ic_featured_video_black_24dp).withIdentifier(6).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(7).withSelectable(false)
                 )
