@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 470
-        versionName "4.7.0-beta"
+        versionCode 471
+        versionName "4.7.1-beta"
     }
 signingConfigs
             {
@@ -26,7 +26,6 @@ signingConfigs
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources true
-            buildConfigField "boolean", "beta", "true"
         }
         debug {
             debuggable true
@@ -45,7 +44,6 @@ signingConfigs
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
     compile('com.afollestad.material-dialogs:core:0.9.0.1@aar') {
         transitive = true
     }
@@ -66,6 +64,5 @@ dependencies {
     compile 'com.baoyz.pullrefreshlayout:library:1.2.0'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.github.javiersantos:AppUpdater:2.4'
-    compile 'com.github.barteksc:android-pdf-viewer:2.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
