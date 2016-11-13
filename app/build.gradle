@@ -8,8 +8,8 @@ android {
         applicationId "me.msfjarvis.kpsconnect"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 471
-        versionName "4.7.1-beta"
+        versionCode 472
+        versionName "4.7.2-beta"
     }
 signingConfigs
             {
