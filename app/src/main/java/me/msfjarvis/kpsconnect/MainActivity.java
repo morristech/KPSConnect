@@ -88,10 +88,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                             } else if (drawerItem.getIdentifier() == 4) {
                                 onSotd();
                             } else if (drawerItem.getIdentifier() == 5) {
-                                customTab();
+                                customTab(Constants.FEEDBACK_URL);
                             } else if (drawerItem.getIdentifier() == 6) {
-                                Intent youTubeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOUTUBE_URL));
-                                startActivity(youTubeIntent);
+                                customTab(Constants.YOUTUBE_URL);
                             } else if (drawerItem.getIdentifier() == 7) {
                                 finish();
                             }
@@ -222,11 +221,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
     
-    private void customTab(){
+    private void customTab(String urlToLoad){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(Constants.FEEDBACK_URL));
+        customTabsIntent.launchUrl(this, Uri.parse(urlToLoad));
     }
 
     public void startUpdateCheck() {
