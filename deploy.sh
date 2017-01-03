@@ -1,6 +1,6 @@
-bash buildReleaseApp.sh
+[[ $(git log HEAD@{1}..HEAD@{0} | grep "skip-ci") == "" ]] && bash buildReleaseApp.sh || echo "CI skipped on user request" && exit 0
 apk=app/app-release.apk
-if [ -f "$apk" ];then
+if [ -f "$apk" ]; then
 export tg_message="\[KPSConnect] Build number $BUILD_NUMBER succeeded, changes [here](http://jenkins.msfjarvis.me/job/afh-browser-master/$BUILD_NUMBER/changes)"
 curl "https://api.telegram.org/bot$TG_BOT_ID/sendmessage" --data "text=$tg_message&chat_id=$TG_GRP_ID&parse_mode=Markdown" 2>&1 >/dev/null
 curl -F chat_id="$TG_GRP_ID" -F document=@$apk "https://api.telegram.org/bot$TG_BOT_ID/sendDocument"
