@@ -9,7 +9,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 472
-        versionName "4.7.2-beta"
+        versionName "4.7.3"
     }
 signingConfigs
             {
