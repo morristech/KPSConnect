@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.msfjarvis.kpsconnect.activities.MainIntroActivity;
-import me.msfjarvis.kpsconnect.activities.YouTubeShizActivity;
 import me.msfjarvis.kpsconnect.fragments.EOTDFragment;
 import me.msfjarvis.kpsconnect.fragments.FeedFragment;
 import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
@@ -42,7 +41,7 @@ import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
 import me.msfjarvis.kpsconnect.utils.AppStatus;
-import me.msfjarvis.kpsconnect.utils.Variables;
+import me.msfjarvis.kpsconnect.utils.Constants;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
     public static final String PREF_FIRST_RUN_KEY = "is_first_run";
@@ -72,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                         new PrimaryDrawerItem().withName(R.string.title_activity_about).withIcon(R.drawable.ic_info_black_24dp).withIdentifier(2).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.eotd).withIcon(R.drawable.ic_event_black_24dp).withIdentifier(3).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.sotd).withIcon(R.drawable.ic_school_black_24dp).withIdentifier(4).withSelectable(true),
-                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false).withEnabled(0),
-                        new PrimaryDrawerItem().withName("Our Launch Video").withIcon(R.drawable.ic_featured_video_black_24dp).withIdentifier(6).withSelectable(true),
+                        new PrimaryDrawerItem().withName(R.string.title_activity_feedback).withIcon(R.drawable.ic_feedback_black_24dp).withIdentifier(5).withSelectable(false).withEnabled(true),
+                        new PrimaryDrawerItem().withName(R.string.our_launch_video).withIcon(R.drawable.ic_featured_video_black_24dp).withIdentifier(6).withSelectable(true),
                         new PrimaryDrawerItem().withName(R.string.exit).withIcon(R.drawable.ic_exit_to_app_black_24dp).withIdentifier(7).withSelectable(false)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -89,10 +88,9 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                             } else if (drawerItem.getIdentifier() == 4) {
                                 onSotd();
                             } else if (drawerItem.getIdentifier() == 5) {
-                                customTab();
+                                customTab(Constants.FEEDBACK_URL);
                             } else if (drawerItem.getIdentifier() == 6) {
-                                Intent youTubeIntent = new Intent(getApplicationContext(), YouTubeShizActivity.class);
-                                startActivity(youTubeIntent);
+                                customTab(Constants.YOUTUBE_URL);
                             } else if (drawerItem.getIdentifier() == 7) {
                                 finish();
                             }
@@ -145,7 +143,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         }
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
-        if (currentFeedFragmentInstance == null) loadFeeds(new Variables().getFeedUrl());
+        if (currentFeedFragmentInstance == null){
+            if (AppStatus.getInstance(this).isOnline()) {
+                loadFeeds(Constants.FEED_URL);
+            }
+        }
     }
     public void onSotd() {
         if(isPaused) return;
@@ -219,23 +221,25 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Toast.makeText(MainActivity.this, String.format(getString(R.string.error_message), message), Toast.LENGTH_SHORT).show();
     }
     
-    private void customTab(){
+    private void customTab(String urlToLoad){
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(new Variables().getFeedbackUrl()));
+        customTabsIntent.launchUrl(this, Uri.parse(urlToLoad));
     }
 
     public void startUpdateCheck() {
         if (BuildConfig.VERSION_NAME.contains("beta")) {
             new AppUpdater(this)
                     .setUpdateFrom(UpdateFrom.XML)
+                    .showEvery(3)
                     .showAppUpdated(true)
                     .setUpdateXML("https://gist.githubusercontent.com/MSF-Jarvis/26c38295d0ca48a8b1ac902fe1b6b388/raw/6409c087acc1f6323d6df07928a623a9a462c73b/manifest.xml")
                     .start();
         } else {
             new AppUpdater(this)
                     .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                    .showEvery(3)
                     .showAppUpdated(true)
                     .start();
         }
