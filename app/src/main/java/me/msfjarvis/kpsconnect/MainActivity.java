@@ -27,7 +27,6 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import org.jetbrains.annotations.NotNull;
-import org.xdevs23.ui.utils.BarColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BarColors.setStatusBarColor(R.color.colorPrimaryDark, getWindow());
-        BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit = pref.edit();
         Toolbar toolbar = findViewById(R.id.toolbar);
