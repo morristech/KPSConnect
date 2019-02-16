@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.github.javiersantos.appupdater.AppUpdater;
-import com.github.javiersantos.appupdater.enums.UpdateFrom;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -62,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
-        startUpdateCheck();
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
@@ -223,14 +220,6 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         builder.setShowTitle(true);
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(urlToLoad));
-    }
-
-    public void startUpdateCheck() {
-        new AppUpdater(this)
-                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .showEvery(3)
-                .showAppUpdated(true)
-                .start();
     }
 
     public void onResume(){
