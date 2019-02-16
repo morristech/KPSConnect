@@ -26,12 +26,12 @@ public class EOTDFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
         //AppCompatTextView textView = (AppCompatTextView) view.findViewById(R.id.textView);
-        Picasso.with(getContext()).load(IMAGE_URL).into(imageView);
+        Picasso.get().load(IMAGE_URL).into(imageView);
         final PullRefreshLayout pullRefreshLayout = (PullRefreshLayout) view.findViewById(R.id.pullRefreshLayout);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Picasso.with(getContext()).load(IMAGE_URL).into(imageView);
+                Picasso.get().load(IMAGE_URL).into(imageView);
             }
         });
 

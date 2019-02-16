@@ -60,7 +60,7 @@ public class FeedFragment extends Fragment {
             );
         for (int i = 0; i < FeedFragmentStorage.getFeeds(FeedType.IMAGES).length; i++) {
             try {
-                Picasso.with(currentContext).load(
+                Picasso.get().load(
                         FeedFragmentStorage.getFeeds(FeedType.IMAGES)[i]).into(cardImages[i]);
             } catch(Exception ex) {
                 ex.printStackTrace();

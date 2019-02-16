@@ -46,7 +46,7 @@ public class FeedActivity extends AppCompatActivity {
             titleTextView.setText(title);
             categoryTextView.setText(category);
             contentTextView.setText(Jsoup.parse(content).text());
-            Picasso.with(getApplicationContext()).load(featuredImage).into(featuredImageView);
+            Picasso.get().load(featuredImage).into(featuredImageView);
         }
         else{
             Toast.makeText(getApplicationContext(),R.string.feed_null_intent_error_text,Toast.LENGTH_SHORT).show();
