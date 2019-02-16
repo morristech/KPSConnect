@@ -24,10 +24,10 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feed_activity);
         try{
-            featuredImageView = (ImageView) findViewById(R.id.feedImageView);
-            titleTextView = (TextView) findViewById(R.id.feedTitleView);
-            categoryTextView = (TextView) findViewById(R.id.feedCategoryView);
-            contentTextView = (TextView) findViewById(R.id.feedContentView);
+            featuredImageView = findViewById(R.id.feedImageView);
+            titleTextView = findViewById(R.id.feedTitleView);
+            categoryTextView = findViewById(R.id.feedCategoryView);
+            contentTextView = findViewById(R.id.feedContentView);
         }catch(NullPointerException exc){
             Log.d(getString(R.string.log_tag_feedview),exc.toString());
             Toast.makeText(getApplicationContext(),exc.toString(),Toast.LENGTH_SHORT).show();

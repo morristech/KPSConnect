@@ -15,6 +15,8 @@ import android.widget.ScrollView;
 
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import me.msfjarvis.kpsconnect.utils.CreateCard;
@@ -34,7 +36,7 @@ public class FeedFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         ScrollView finalView = new ScrollView(currentContext);
         LinearLayout listView = new LinearLayout(currentContext);
         finalView.addView(listView);

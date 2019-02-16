@@ -28,6 +28,7 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
+import org.jetbrains.annotations.NotNull;
 import org.xdevs23.ui.utils.BarColors;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import me.msfjarvis.kpsconnect.fragments.SOTDFragment;
 import me.msfjarvis.kpsconnect.rssmanager.OnRssLoadListener;
 import me.msfjarvis.kpsconnect.rssmanager.RssItem;
 import me.msfjarvis.kpsconnect.rssmanager.RssReader;
-import me.msfjarvis.kpsconnect.utils.AppStatus;
+import me.msfjarvis.kpsconnect.utils.Utilities;
 import me.msfjarvis.kpsconnect.utils.Constants;
 
 public class MainActivity extends AppCompatActivity implements OnRssLoadListener {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         BarColors.setNavigationBarColor(R.color.colorPrimaryDark, getWindow());
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit = pref.edit();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_main);
         startUpdateCheck();
@@ -77,33 +78,29 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
-                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem != null) {
-                            if (drawerItem.getIdentifier() == 1) {
-                                onHome();
-                            } else if (drawerItem.getIdentifier() == 2) {
-                                onAbout();
-                            } else if (drawerItem.getIdentifier() == 3) {
-                                onEotd();
-                            } else if (drawerItem.getIdentifier() == 4) {
-                                onSotd();
-                            } else if (drawerItem.getIdentifier() == 5) {
-                                customTab(Constants.FEEDBACK_URL);
-                            } else if (drawerItem.getIdentifier() == 6) {
-                                customTab(Constants.YOUTUBE_URL);
-                            } else if (drawerItem.getIdentifier() == 7) {
-                                finish();
-                            }
+                    public boolean onItemClick(View view, int position, @NotNull IDrawerItem drawerItem) {
+                        if (drawerItem.getIdentifier() == 1) {
+                            onHome();
+                        } else if (drawerItem.getIdentifier() == 2) {
+                            onAbout();
+                        } else if (drawerItem.getIdentifier() == 3) {
+                            onEotd();
+                        } else if (drawerItem.getIdentifier() == 4) {
+                            onSotd();
+                        } else if (drawerItem.getIdentifier() == 5) {
+                            customTab(Constants.FEEDBACK_URL);
+                        } else if (drawerItem.getIdentifier() == 6) {
+                            customTab(Constants.YOUTUBE_URL);
+                        } else if (drawerItem.getIdentifier() == 7) {
+                            finish();
                         }
                         return false;
                     }
                 })
                 .withSavedInstance(savedInstanceState)
                 .build();
-        if (result != null) {
-            result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
-        }
-        if (AppStatus.getInstance(this).isOnline()) {
+        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+        if (Utilities.isOnline(this)) {
             Log.d(getString(R.string.log_tag), getString(R.string.log_tag_internet_connected));
             FirebaseMessaging.getInstance().subscribeToTopic("news");
             edit.putString(PREF_REGID_KEY, FirebaseInstanceId.getInstance().getToken());
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
         ht.commit();
         Log.d(getString(R.string.log_tag), String.format(getString(R.string.log_null_check_feed), currentFeedFragmentInstance == null));
         if (currentFeedFragmentInstance == null){
-            if (AppStatus.getInstance(this).isOnline()) {
+            if (Utilities.isOnline(this)) {
                 loadFeeds(Constants.FEED_URL);
             }
         }
@@ -229,20 +226,11 @@ public class MainActivity extends AppCompatActivity implements OnRssLoadListener
     }
 
     public void startUpdateCheck() {
-        if (BuildConfig.VERSION_NAME.contains("beta")) {
-            new AppUpdater(this)
-                    .setUpdateFrom(UpdateFrom.XML)
-                    .showEvery(3)
-                    .showAppUpdated(true)
-                    .setUpdateXML("https://gist.githubusercontent.com/MSF-Jarvis/26c38295d0ca48a8b1ac902fe1b6b388/raw/6409c087acc1f6323d6df07928a623a9a462c73b/manifest.xml")
-                    .start();
-        } else {
-            new AppUpdater(this)
-                    .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                    .showEvery(3)
-                    .showAppUpdated(true)
-                    .start();
-        }
+        new AppUpdater(this)
+                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
+                .showEvery(3)
+                .showAppUpdated(true)
+                .start();
     }
 
     public void onResume(){
