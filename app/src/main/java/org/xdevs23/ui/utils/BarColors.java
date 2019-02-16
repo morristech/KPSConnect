@@ -3,8 +3,8 @@ package org.xdevs23.ui.utils;
 import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorRes;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorRes;
+import androidx.core.content.ContextCompat;
 import android.view.Window;
 import android.view.WindowManager;
 
